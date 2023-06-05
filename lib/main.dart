@@ -7,10 +7,11 @@ import 'package:arecanut_app/theme/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_builder/responsive_builder.dart';
 
 import 'firebase_options.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -29,7 +30,8 @@ class MyApp extends StatelessWidget {
         create: (_) => ModelTheme(),
         child: Consumer<ModelTheme>(
             builder: (context, ModelTheme themeNotifier, child) {
-              return MaterialApp(
+          return ResponsiveApp(builder: (context) {
+            return MaterialApp(
                 debugShowCheckedModeBanner: false,
                 title: 'Arecanut App',
                 routes: {
@@ -42,11 +44,12 @@ class MyApp extends StatelessWidget {
                 // ),
                 theme: AppTheme.lightTheme,
                 darkTheme: AppTheme.darkTheme,
-                themeMode: themeNotifier.isDark ? ThemeMode.light : ThemeMode.dark,
-                home: role == "user" ? const MainPage() : const MainPageForProvider()
-              );
-            })
-    );
+                themeMode:
+                    themeNotifier.isDark ? ThemeMode.light : ThemeMode.dark,
+                // home: role == "user" ? const MainPage() : const MainPageForProvider()
+                home: const MainPage());
+          });
+        }));
     // return MaterialApp(
     //   debugShowCheckedModeBanner: false,
     //   title: 'Arecanut App',
@@ -62,13 +65,11 @@ class MyApp extends StatelessWidget {
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
 
-
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,17 +80,27 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            ElevatedButton(onPressed: (){
-              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => SignInScreen()),
-                    (route) => false,);
-            }, child: Text("Go to login page")),
-            ElevatedButton(onPressed: (){
-              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => MainPage()),
-                    (route) => false,);
-            }, child: Text("Go to home page"))
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => SignInScreen()),
+                    (route) => false,
+                  );
+                },
+                child: Text("Go to login page")),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => MainPage()),
+                    (route) => false,
+                  );
+                },
+                child: Text("Go to home page"))
           ],
         ),
-      ),// This trailing comma makes auto-formatting nicer for build methods.
+      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

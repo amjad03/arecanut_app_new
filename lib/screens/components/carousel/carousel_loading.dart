@@ -5,16 +5,16 @@ import 'package:shimmer/shimmer.dart';
 
 import '../../../theme/model_theme.dart';
 
-
-class CarouselLoading extends StatelessWidget {
-  const CarouselLoading({Key? key}) : super(key: key);
+class CarouselLoadingMobile extends StatelessWidget {
+  const CarouselLoadingMobile({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
     // final themeProvider = Provider.of<ModelTheme>(context);
     // final color = themeProvider.themeMode == ThemeMode.dark ? Colors.white : Colors.grey ;
-    var color = Theme.of(context).brightness == Brightness.dark ? const Color(0xFF333333) : Colors.white;
+    var color = Theme.of(context).brightness == Brightness.dark
+        ? const Color(0xFF333333)
+        : Colors.white;
 
     return Shimmer.fromColors(
       highlightColor: Colors.white,
@@ -30,7 +30,7 @@ class CarouselLoading extends StatelessWidget {
                 color: Colors.grey,
                 borderRadius: BorderRadius.all(Radius.circular(10.0)),
               ),
-              child:ClipRRect(
+              child: ClipRRect(
                 borderRadius: const BorderRadius.all(Radius.circular(10.0)),
                 child: AspectRatio(
                   aspectRatio: 16 / 8,
@@ -41,48 +41,222 @@ class CarouselLoading extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 8,),
+          const SizedBox(
+            height: 8,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
                 width: 8,
                 height: 8,
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: color),
+                decoration: BoxDecoration(shape: BoxShape.circle, color: color),
               ),
-              const SizedBox(width: 3,),
+              const SizedBox(
+                width: 3,
+              ),
               Container(
                 width: 8,
                 height: 8,
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: color),
+                decoration: BoxDecoration(shape: BoxShape.circle, color: color),
               ),
-              const SizedBox(width: 3,),
+              const SizedBox(
+                width: 3,
+              ),
               Container(
                 width: 8,
                 height: 8,
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: color),
+                decoration: BoxDecoration(shape: BoxShape.circle, color: color),
               ),
-              const SizedBox(width: 3,),
+              const SizedBox(
+                width: 3,
+              ),
               Container(
                 width: 8,
                 height: 8,
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: color),
+                decoration: BoxDecoration(shape: BoxShape.circle, color: color),
               ),
-              const SizedBox(width: 3,),
+              const SizedBox(
+                width: 3,
+              ),
               Container(
                 width: 8,
                 height: 8,
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: color),
+                decoration: BoxDecoration(shape: BoxShape.circle, color: color),
+              )
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class CarouselLoadingTablet extends StatelessWidget {
+  const CarouselLoadingTablet({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // final themeProvider = Provider.of<ModelTheme>(context);
+    // final color = themeProvider.themeMode == ThemeMode.dark ? Colors.white : Colors.grey ;
+    var color = Theme.of(context).brightness == Brightness.dark
+        ? const Color(0xFF333333)
+        : Colors.white;
+
+    return Shimmer.fromColors(
+      highlightColor: Colors.white,
+      baseColor: Colors.grey.shade300,
+      child: Column(
+        children: [
+          FractionallySizedBox(
+            widthFactor: 0.9,
+            child: Container(
+              // height: Dimensions.oneTwenty,
+              // margin: const EdgeInsets.all(10),
+              decoration: const BoxDecoration(
+                color: Colors.grey,
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+              ),
+              child: ClipRRect(
+                borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                child: AspectRatio(
+                  aspectRatio: 16 / 4,
+                  child: Container(
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 8,
+                height: 8,
+                decoration: BoxDecoration(shape: BoxShape.circle, color: color),
+              ),
+              const SizedBox(
+                width: 3,
+              ),
+              Container(
+                width: 8,
+                height: 8,
+                decoration: BoxDecoration(shape: BoxShape.circle, color: color),
+              ),
+              const SizedBox(
+                width: 3,
+              ),
+              Container(
+                width: 8,
+                height: 8,
+                decoration: BoxDecoration(shape: BoxShape.circle, color: color),
+              ),
+              const SizedBox(
+                width: 3,
+              ),
+              Container(
+                width: 8,
+                height: 8,
+                decoration: BoxDecoration(shape: BoxShape.circle, color: color),
+              ),
+              const SizedBox(
+                width: 3,
+              ),
+              Container(
+                width: 8,
+                height: 8,
+                decoration: BoxDecoration(shape: BoxShape.circle, color: color),
+              )
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class CarouselLoadingDesktop extends StatelessWidget {
+  const CarouselLoadingDesktop({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // final themeProvider = Provider.of<ModelTheme>(context);
+    // final color = themeProvider.themeMode == ThemeMode.dark ? Colors.white : Colors.grey ;
+    var color = Theme.of(context).brightness == Brightness.dark
+        ? const Color(0xFF333333)
+        : Colors.white;
+
+    return Shimmer.fromColors(
+      highlightColor: Colors.white,
+      baseColor: Colors.grey.shade300,
+      child: Column(
+        children: [
+          FractionallySizedBox(
+            widthFactor: 0.9,
+            child: Container(
+              // height: Dimensions.oneTwenty,
+              // margin: const EdgeInsets.all(10),
+              decoration: const BoxDecoration(
+                color: Colors.grey,
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+              ),
+              child: ClipRRect(
+                borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                child: AspectRatio(
+                  aspectRatio: 16 / 3,
+                  child: Container(
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 8,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 8,
+                height: 8,
+                decoration: BoxDecoration(shape: BoxShape.circle, color: color),
+              ),
+              const SizedBox(
+                width: 3,
+              ),
+              Container(
+                width: 8,
+                height: 8,
+                decoration: BoxDecoration(shape: BoxShape.circle, color: color),
+              ),
+              const SizedBox(
+                width: 3,
+              ),
+              Container(
+                width: 8,
+                height: 8,
+                decoration: BoxDecoration(shape: BoxShape.circle, color: color),
+              ),
+              const SizedBox(
+                width: 3,
+              ),
+              Container(
+                width: 8,
+                height: 8,
+                decoration: BoxDecoration(shape: BoxShape.circle, color: color),
+              ),
+              const SizedBox(
+                width: 3,
+              ),
+              Container(
+                width: 8,
+                height: 8,
+                decoration: BoxDecoration(shape: BoxShape.circle, color: color),
               )
             ],
           )

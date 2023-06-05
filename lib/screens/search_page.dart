@@ -11,8 +11,6 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
-
-
   final _searchController = TextEditingController();
   bool isLoading = false;
 
@@ -43,9 +41,12 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-
-    var color = Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black;
-    var bgColor = Theme.of(context).brightness == Brightness.dark ? Colors.grey.shade700 : Colors.white;
+    var color = Theme.of(context).brightness == Brightness.dark
+        ? Colors.white
+        : Colors.black;
+    var bgColor = Theme.of(context).brightness == Brightness.dark
+        ? Colors.grey.shade700
+        : Colors.white;
 
     // print(result[0]);
 
@@ -79,16 +80,16 @@ class _SearchPageState extends State<SearchPage> {
       // ),
       appBar: AppBar(
         title: GestureDetector(
-          onTap: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const SearchPage()));
+          onTap: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const SearchPage()));
           },
           child: Container(
             width: double.maxFinite,
-            height: Dimensions.forty,
+            height: 40,
             decoration: BoxDecoration(
                 color: bgColor,
-                borderRadius: BorderRadius.circular(Dimensions.ten)
-            ),
+                borderRadius: BorderRadius.circular(Dimensions.ten)),
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: Dimensions.ten),
               child: const TextField(
@@ -98,7 +99,8 @@ class _SearchPageState extends State<SearchPage> {
                   border: InputBorder.none,
                   focusColor: Colors.black,
                   hintText: 'Search here...',
-                  suffixIcon: Icon(Icons.search,color: Colors.grey,
+                  suffixIcon: Icon(
+                    Icons.search, color: Colors.grey,
                     // onPressed: () => _search(_searchController.text.trim()),
                   ),
                 ),
@@ -113,7 +115,14 @@ class _SearchPageState extends State<SearchPage> {
         actions: [
           Padding(
             padding: EdgeInsets.all(Dimensions.ten),
-            child: Chip(backgroundColor: Colors.white,label: Text("Filter"),avatar: Icon(Icons.filter_alt,color: Colors.black87,),),
+            child: const Chip(
+              backgroundColor: Colors.white,
+              label: Text("Filter"),
+              avatar: Icon(
+                Icons.filter_alt,
+                color: Colors.black87,
+              ),
+            ),
           ),
           // Chip(backgroundColor: Colors.white,avatar: Icon(Icons.language,color: Colors.black87,), label: Text(""),
           //   labelPadding: EdgeInsets.zero,)
@@ -140,17 +149,16 @@ class _SearchPageState extends State<SearchPage> {
       body: Stack(
         children: [
           isLoading
-          ?
-        SizedBox(
-            width: double.infinity,
-            height: double.infinity,
-            child: Center(
-              child: CircularProgressIndicator(
-                color: color,
-              ),
-            ),
-          )
-          : Container(),
+              ? SizedBox(
+                  width: double.infinity,
+                  height: double.infinity,
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      color: color,
+                    ),
+                  ),
+                )
+              : Container(),
           // !isLoading ?
           // ListView.builder(
           //   itemCount: result.length,
@@ -188,7 +196,7 @@ class _SearchPageState extends State<SearchPage> {
           //     ),
           //   ),
           // )
-              // : Container()
+          // : Container()
         ],
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:arecanut_app/screens/components/drawers/navigation_drawer.dart';
 import 'package:arecanut_app/screens/profile/profile.dart';
-import 'package:arecanut_app/screens/tabs/home_page.dart';
+import 'package:arecanut_app/screens/tabs/home.dart';
+import 'package:arecanut_app/screens/tabs/home_page/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:arecanut_app/screens/search_page.dart';
 import 'package:geolocator/geolocator.dart';
@@ -10,7 +11,6 @@ import '../constants/dimensions.dart';
 import 'auth/sign_in.dart';
 import '../services/location_service.dart';
 
-
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
 
@@ -19,7 +19,6 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-
   // final _searchController = TextEditingController();
   int _selectedIndex = 0;
 
@@ -69,9 +68,12 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-
-    var color = Theme.of(context).brightness == Brightness.dark ? Colors.grey.shade700 : Colors.white;
-    var iconColor = Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black87;
+    var color = Theme.of(context).brightness == Brightness.dark
+        ? Colors.grey.shade700
+        : Colors.white;
+    var iconColor = Theme.of(context).brightness == Brightness.dark
+        ? Colors.white
+        : Colors.black87;
 
     return Scaffold(
       // appBar: AppBar(
@@ -133,14 +135,20 @@ class _MainPageState extends State<MainPage> {
       //   ],
       // ),
       appBar: AppBar(
-        title: Text("Logo",style: TextStyle(fontSize: Dimensions.twenty, fontWeight: FontWeight.bold),),
+        title: Text(
+          "Logo",
+          style: TextStyle(
+              fontSize: Dimensions.twenty, fontWeight: FontWeight.bold),
+        ),
         actions: [
           IconButton(
-              onPressed: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => SearchPage()));
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SearchPage()));
               },
-              icon: Icon(Icons.search,)
-          ),
+              icon: Icon(
+                Icons.search,
+              )),
           // Chip(
           //   backgroundColor: Colors.white,
           //   avatar: Icon(Icons.language,color: iconColor,),
@@ -148,20 +156,26 @@ class _MainPageState extends State<MainPage> {
           //   labelPadding: EdgeInsets.zero,
           // ),
           IconButton(
-              onPressed: (){
+              onPressed: () {
                 // Navigator.push(context, MaterialPageRoute(builder: (context) => SearchPage()));
               },
-              icon: Icon(Icons.language,)
-          ),
+              icon: Icon(
+                Icons.language,
+              )),
           IconButton(
-              onPressed: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage(length: 0)));
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ProfilePage(length: 0)));
               },
-              icon: Icon(Icons.account_circle,)
-          ),
+              icon: Icon(
+                Icons.account_circle,
+              )),
         ],
       ),
       body: HomePage(),
+      // body: MachineStatusScreen(),
       drawer: CustomDrawer(),
     );
   }
@@ -184,4 +198,3 @@ class _MainPageForUserState extends State<MainPageForUser> {
     );
   }
 }
-
