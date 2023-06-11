@@ -103,7 +103,7 @@ ElevatedButton customRoundedButton(
             style: const TextStyle(color: Colors.white),
           ),
           SizedBox(
-            width: Dimensions.width10,
+            width: 10,
           ),
           Icon(
             icon,

@@ -52,6 +52,7 @@ dependencies:
   geolocator: ^9.0.2
   numberpicker: ^2.1.2
   responsive_builder: ^0.7.0
+  rxdart: ^0.27.7
 
 dev_dependencies:
   flutter_test:

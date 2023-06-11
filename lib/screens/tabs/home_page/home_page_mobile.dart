@@ -6,7 +6,10 @@ import 'package:intl/intl.dart';
 import '../../../constants/dimensions.dart';
 import '../../../widgets/custom_button.dart';
 import '../../components/carousel/carousel_page.dart';
+import '../../components/drawers/navigation_drawer.dart';
 import '../../components/graph/line_graph.dart';
+import '../../profile/profile.dart';
+import '../../search_page.dart';
 
 class HomePageMobile extends StatefulWidget {
   const HomePageMobile({Key? key}) : super(key: key);
@@ -19,6 +22,46 @@ class _HomePageMobileState extends State<HomePageMobile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Logo",
+          style: TextStyle(
+              fontSize: Dimensions.twenty, fontWeight: FontWeight.bold),
+        ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SearchPage()));
+              },
+              icon: Icon(
+                Icons.search,
+              )),
+          // Chip(
+          //   backgroundColor: Colors.white,
+          //   avatar: Icon(Icons.language,color: iconColor,),
+          //   label: Text(""),
+          //   labelPadding: EdgeInsets.zero,
+          // ),
+          IconButton(
+              onPressed: () {
+                // Navigator.push(context, MaterialPageRoute(builder: (context) => SearchPage()));
+              },
+              icon: Icon(
+                Icons.language,
+              )),
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ProfilePage(length: 0)));
+              },
+              icon: Icon(
+                Icons.account_circle,
+              )),
+        ],
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(Dimensions.ten),
@@ -182,6 +225,7 @@ class _HomePageMobileState extends State<HomePageMobile> {
                   return ListView.builder(
                     shrinkWrap: true,
                     itemCount: machineDocs.length,
+                    // itemCount: 2,
                     itemBuilder: (BuildContext context, int index) {
                       final machineData =
                           machineDocs[index].data() as Map<String, dynamic>;
@@ -284,6 +328,7 @@ class _HomePageMobileState extends State<HomePageMobile> {
           ),
         ),
       ),
+      drawer: CustomDrawer(),
       // body: ListView.builder(
       //   itemCount: 10,
       //   itemBuilder: (context, index) => Padding(

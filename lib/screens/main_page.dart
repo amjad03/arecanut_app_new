@@ -134,49 +134,49 @@ class _MainPageState extends State<MainPage> {
       //     // ),
       //   ],
       // ),
-      appBar: AppBar(
-        title: Text(
-          "Logo",
-          style: TextStyle(
-              fontSize: Dimensions.twenty, fontWeight: FontWeight.bold),
-        ),
-        actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => SearchPage()));
-              },
-              icon: Icon(
-                Icons.search,
-              )),
-          // Chip(
-          //   backgroundColor: Colors.white,
-          //   avatar: Icon(Icons.language,color: iconColor,),
-          //   label: Text(""),
-          //   labelPadding: EdgeInsets.zero,
-          // ),
-          IconButton(
-              onPressed: () {
-                // Navigator.push(context, MaterialPageRoute(builder: (context) => SearchPage()));
-              },
-              icon: Icon(
-                Icons.language,
-              )),
-          IconButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ProfilePage(length: 0)));
-              },
-              icon: Icon(
-                Icons.account_circle,
-              )),
-        ],
-      ),
+      // appBar: AppBar(
+      //   title: Text(
+      //     "Logo",
+      //     style: TextStyle(
+      //         fontSize: Dimensions.twenty, fontWeight: FontWeight.bold),
+      //   ),
+      //   actions: [
+      //     IconButton(
+      //         onPressed: () {
+      //           Navigator.push(context,
+      //               MaterialPageRoute(builder: (context) => SearchPage()));
+      //         },
+      //         icon: Icon(
+      //           Icons.search,
+      //         )),
+      //     // Chip(
+      //     //   backgroundColor: Colors.white,
+      //     //   avatar: Icon(Icons.language,color: iconColor,),
+      //     //   label: Text(""),
+      //     //   labelPadding: EdgeInsets.zero,
+      //     // ),
+      //     IconButton(
+      //         onPressed: () {
+      //           // Navigator.push(context, MaterialPageRoute(builder: (context) => SearchPage()));
+      //         },
+      //         icon: Icon(
+      //           Icons.language,
+      //         )),
+      //     IconButton(
+      //         onPressed: () {
+      //           Navigator.push(
+      //               context,
+      //               MaterialPageRoute(
+      //                   builder: (context) => ProfilePage(length: 0)));
+      //         },
+      //         icon: Icon(
+      //           Icons.account_circle,
+      //         )),
+      //   ],
+      // ),
       body: HomePage(),
       // body: MachineStatusScreen(),
-      drawer: CustomDrawer(),
+      // drawer: CustomDrawer(),
     );
   }
 }

@@ -6,7 +6,10 @@ import 'package:intl/intl.dart';
 import '../../../constants/dimensions.dart';
 import '../../../widgets/custom_button.dart';
 import '../../components/carousel/carousel_page.dart';
+import '../../components/drawers/navigation_drawer.dart';
 import '../../components/graph/line_graph.dart';
+import '../../profile/profile.dart';
+import '../../search_page.dart';
 
 class HomePageTablet extends StatefulWidget {
   const HomePageTablet({Key? key}) : super(key: key);
@@ -65,6 +68,46 @@ class _HomePageTabletState extends State<HomePageTablet> {
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Logo",
+          style: TextStyle(
+              fontSize: Dimensions.twenty, fontWeight: FontWeight.bold),
+        ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SearchPage()));
+              },
+              icon: Icon(
+                Icons.search,
+              )),
+          // Chip(
+          //   backgroundColor: Colors.white,
+          //   avatar: Icon(Icons.language,color: iconColor,),
+          //   label: Text(""),
+          //   labelPadding: EdgeInsets.zero,
+          // ),
+          IconButton(
+              onPressed: () {
+                // Navigator.push(context, MaterialPageRoute(builder: (context) => SearchPage()));
+              },
+              icon: Icon(
+                Icons.language,
+              )),
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ProfilePage(length: 0)));
+              },
+              icon: Icon(
+                Icons.account_circle,
+              )),
+        ],
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(Dimensions.ten),
@@ -114,6 +157,7 @@ class _HomePageTabletState extends State<HomePageTablet> {
                     ),
                     shrinkWrap: true,
                     itemCount: machineDocs.length,
+                    // itemCount: 2,
                     itemBuilder: (BuildContext context, int index) {
                       final machineData =
                           machineDocs[index].data() as Map<String, dynamic>;
@@ -226,6 +270,7 @@ class _HomePageTabletState extends State<HomePageTablet> {
           ),
         ),
       ),
+      drawer: CustomDrawer(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           addData();
