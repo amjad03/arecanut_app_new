@@ -1,15 +1,19 @@
+import 'package:arecanut_app/screens/tabs/book_machine/book_machine_page_mobile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
 
 import '../../../constants/dimensions.dart';
+import '../../../models/data_models/machine_service_model.dart';
+import '../../../models/data_models/service_provider_model.dart';
 import '../../../widgets/custom_button.dart';
 import '../../components/carousel/carousel_page.dart';
 import '../../components/drawers/navigation_drawer.dart';
 import '../../components/graph/line_graph.dart';
 import '../../profile/profile.dart';
 import '../../search_page.dart';
+import '../detail_screen/detail_screen.dart';
 
 class HomePageMobile extends StatefulWidget {
   const HomePageMobile({Key? key}) : super(key: key);
@@ -231,14 +235,46 @@ class _HomePageMobileState extends State<HomePageMobile> {
                           machineDocs[index].data() as Map<String, dynamic>;
                       final availability = machineData['status'];
 
-                      return MachineCardMobile(
-                        title: machineData['machineName'],
-                        rating: 4.0,
-                        totalRatings: 42,
-                        price: machineData['price'],
-                        serviceProviderName: "Some Name",
-                        image: machineData['galleryImages'][0],
-                        address: 'Kotekere hubli Road, Sirsi',
+                      return GestureDetector(
+                        onTap: () async {
+                          print("clicked");
+                          final serviceProviderId =
+                              machineData['serviceProviderId'];
+
+                          DocumentSnapshot serviceProviderSnapshot =
+                              await FirebaseFirestore.instance
+                                  .collection('users')
+                                  .doc(serviceProviderId)
+                                  .get();
+
+                          MachineService machineService = MachineService(
+                              serviceProviderId:
+                                  machineData['serviceProviderId'],
+                              machineName: machineData['machineName'],
+                              machineCapacity: machineData['machineCapacity'],
+                              price: machineData['price'],
+                              galleryImages: machineData['galleryImages'],
+                              status: machineData['status']);
+                          // MachineService.fromJson(machineDocs[index]
+                          //     .data() as Map<String, dynamic>);
+
+                          ServiceProviderModel serviceProviderModel =
+                              ServiceProviderModel.fromJson(
+                                  serviceProviderSnapshot.data()
+                                      as Map<String, dynamic>);
+
+                          goToDetailScreen(
+                              machineService, serviceProviderModel);
+                        },
+                        child: MachineCardMobile(
+                          title: machineData['machineName'],
+                          rating: 4.0,
+                          totalRatings: 42,
+                          price: machineData['price'],
+                          serviceProviderName: "Some Name",
+                          image: machineData['galleryImages'][0],
+                          address: 'Kotekere hubli Road, Sirsi',
+                        ),
                       );
                       // return ListTile(
                       //   title: Text('Machine ${index + 1}'),
@@ -432,6 +468,16 @@ class _HomePageMobileState extends State<HomePageMobile> {
       // ),
     );
   }
+
+  void goToDetailScreen(MachineService machineService,
+      ServiceProviderModel serviceProviderModel) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => DetailScreen(
+                machineService: machineService,
+                serviceProviderModel: serviceProviderModel)));
+  }
 }
 
 //========================================================================//
@@ -621,7 +667,20 @@ class _MachineCardMobileState extends State<MachineCardMobile> {
                           Expanded(
                               child: CustomButton(
                             title: "Book Now",
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => BookMachineMobile(
+                                          title: widget.title,
+                                          image: widget.image,
+                                          price: widget.price.toString(),
+                                          rating: widget.rating.toString(),
+                                          distance: "10",
+                                          totalRatings:
+                                              widget.totalRatings.toString(),
+                                          address: widget.address)));
+                            },
                             fontSize: 12.0,
                           ))
                         ],

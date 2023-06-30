@@ -1,10 +1,11 @@
 import 'package:arecanut_app/models/data_models/machine_service_model.dart';
 import 'package:arecanut_app/models/data_models/service_provider_model.dart';
-import 'package:arecanut_app/screens/detail_screen/deatil_screen_mobile.dart';
-import 'package:arecanut_app/screens/detail_screen/detail_screen_desktop.dart';
-import 'package:arecanut_app/screens/detail_screen/detail_screen_tablet.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_builder/responsive_builder.dart';
+
+import 'deatil_screen_mobile.dart';
+import 'detail_screen_desktop.dart';
+import 'detail_screen_tablet.dart';
 
 class DetailScreen extends StatefulWidget {
   const DetailScreen(

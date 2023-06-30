@@ -1,6 +1,7 @@
 class MachineService {
   MachineService(
-      {required this.id,
+      {
+      // required this.id,
       required this.serviceProviderId,
       required this.machineName,
       required this.machineCapacity,
@@ -8,17 +9,17 @@ class MachineService {
       required this.galleryImages,
       required this.status});
 
-  final String id;
+  // final String id;
   final String serviceProviderId;
   final String machineName;
   final String machineCapacity;
-  final String price;
+  final int price;
   final List galleryImages;
   final bool status;
 
   factory MachineService.fromJson(Map<String, dynamic> json) {
     return MachineService(
-        id: json['id'],
+        // id: json['id'],
         serviceProviderId: json['serviceProviderId'],
         machineName: json['machineName'],
         machineCapacity: json['machineCapacity'],
@@ -29,7 +30,7 @@ class MachineService {
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
+      // 'id': id,
       'serviceProviderId': serviceProviderId,
       'machineName': machineName,
       'machineCapacity': machineCapacity,

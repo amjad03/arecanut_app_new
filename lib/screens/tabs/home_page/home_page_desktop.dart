@@ -25,6 +25,7 @@ import '../../policies/privacy_policy.dart';
 import '../../profile/profile.dart';
 import '../../search_page.dart';
 import '../../settings.dart';
+import '../detail_screen/detail_screen.dart';
 
 class HomePageDesktop extends StatefulWidget {
   const HomePageDesktop({Key? key}) : super(key: key);
@@ -376,6 +377,7 @@ class _HomePageDesktopState extends State<HomePageDesktop> {
 
                             return GestureDetector(
                               onTap: () async {
+                                print("clicked");
                                 final serviceProviderId =
                                     machineData['serviceProviderId'];
 
@@ -385,14 +387,25 @@ class _HomePageDesktopState extends State<HomePageDesktop> {
                                         .doc(serviceProviderId)
                                         .get();
 
-                                MachineService machineService =
-                                    MachineService.fromJson(machineDocs[index]
-                                        .data() as Map<String, dynamic>);
+                                MachineService machineService = MachineService(
+                                    serviceProviderId:
+                                        machineData['serviceProviderId'],
+                                    machineName: machineData['machineName'],
+                                    machineCapacity:
+                                        machineData['machineCapacity'],
+                                    price: machineData['price'],
+                                    galleryImages: machineData['galleryImages'],
+                                    status: machineData['status']);
+                                // MachineService.fromJson(machineDocs[index]
+                                //     .data() as Map<String, dynamic>);
 
                                 ServiceProviderModel serviceProviderModel =
                                     ServiceProviderModel.fromJson(
                                         serviceProviderSnapshot.data()
                                             as Map<String, dynamic>);
+
+                                goToDetailScreen(
+                                    machineService, serviceProviderModel);
                               },
                               child: MachineCardDesktop(
                                 title: machineData['machineName'],
@@ -617,6 +630,16 @@ class _HomePageDesktopState extends State<HomePageDesktop> {
       indent: 15,
       endIndent: 15,
     );
+  }
+
+  void goToDetailScreen(MachineService machineService,
+      ServiceProviderModel serviceProviderModel) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => DetailScreen(
+                machineService: machineService,
+                serviceProviderModel: serviceProviderModel)));
   }
 }
 
