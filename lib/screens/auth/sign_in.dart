@@ -105,7 +105,14 @@ class _SignInScreenState extends State<SignInScreen> {
                                   fontFamily: 'Inter'),
                             ),
                             SizedBox(
-                              height: Dimensions.height20,
+                              height: Dimensions.height10,
+                            ),
+                            Divider(
+                              indent: Dimensions.forty,
+                              endIndent: Dimensions.forty,
+                            ),
+                            SizedBox(
+                              height: Dimensions.height10,
                             ),
                             // CustomInputField(controller: emailController, icon: Icons.email, label: "Enter Your Email", password: false, phoneNumber: false,maxLines: 1, isFor: 'Email',),
                             Column(

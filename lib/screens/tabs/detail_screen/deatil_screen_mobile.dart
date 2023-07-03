@@ -2,11 +2,13 @@ import 'package:arecanut_app/models/data_models/machine_service_model.dart';
 import 'package:arecanut_app/models/data_models/service_provider_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
 
 import '../../../widgets/custom_button.dart';
+import '../../components/footer/footer_mobile.dart';
 
 class DetailScreenMobile extends StatefulWidget {
   const DetailScreenMobile(
@@ -111,7 +113,7 @@ class _DetailScreenMobileState extends State<DetailScreenMobile> {
                   fit: BoxFit.cover,
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               SizedBox(
                 height: 100,
                 width: double.maxFinite,
@@ -122,7 +124,7 @@ class _DetailScreenMobileState extends State<DetailScreenMobile> {
                         ? 5
                         : widget.machineService.galleryImages.length,
                     itemBuilder: (context, index) {
-                      return GestureDetector(
+                      return InkWell(
                         onTap: () {
                           setState(() {
                             selectedImage =
@@ -131,7 +133,7 @@ class _DetailScreenMobileState extends State<DetailScreenMobile> {
                         },
                         child: Stack(children: [
                           Container(
-                            margin: EdgeInsets.only(right: 10),
+                            margin: const EdgeInsets.only(right: 10),
                             // decoration: BoxDecoration(
                             //     border:
                             //         Border.all(color: Colors.white, width: 5)),
@@ -167,24 +169,24 @@ class _DetailScreenMobileState extends State<DetailScreenMobile> {
                   children: [
                     Row(
                       children: [
-                        Text(
+                        const Text(
                           "Price :",
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 8,
                         ),
                         Text(
                           "Rs ₹ $formattedPrice /-",
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 20,
                           ),
                         ),
                       ],
                     ),
                     Row(
-                      children: [
+                      children: const [
                         Text(
                           "Distance :",
                           style: TextStyle(
@@ -212,7 +214,7 @@ class _DetailScreenMobileState extends State<DetailScreenMobile> {
                   children: [
                     Row(
                       children: [
-                        Text(
+                        const Text(
                           "4.0",
                           style: TextStyle(fontSize: 15),
                         ),
@@ -231,20 +233,22 @@ class _DetailScreenMobileState extends State<DetailScreenMobile> {
                           ),
                           onRatingUpdate: (rating) {
                             // Callback function when the rating is updated
-                            print(rating);
+                            if (kDebugMode) {
+                              print(rating);
+                            }
                           },
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 15,
                         ),
-                        Text(
+                        const Text(
                           "${4.0} ratings",
                           style: TextStyle(fontSize: 15),
                         ),
                       ],
                     ),
                     Row(
-                      children: [
+                      children: const [
                         Icon(Icons.message),
                         SizedBox(
                           width: 8,
@@ -270,12 +274,12 @@ class _DetailScreenMobileState extends State<DetailScreenMobile> {
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 child: Row(
                   children: [
-                    Text(
+                    const Text(
                       "Status:",
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
                     Text(
@@ -296,7 +300,7 @@ class _DetailScreenMobileState extends State<DetailScreenMobile> {
               Row(
                 children: [
                   Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       shape: BoxShape.circle,
                       color: Colors.grey,
                       // image: DecorationImage(
@@ -310,12 +314,12 @@ class _DetailScreenMobileState extends State<DetailScreenMobile> {
                     //   placeholder: (context, url) =>
                     //       Image.asset("assets/images/image_placeholder.png"),
                     // ),
-                    child: Icon(
+                    child: const Icon(
                       Icons.person,
                       size: 40,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 30,
                   ),
                   Column(
@@ -323,15 +327,15 @@ class _DetailScreenMobileState extends State<DetailScreenMobile> {
                     children: [
                       Text(
                         "Mr. ${widget.serviceProviderModel.serviceProviderName}",
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 18, fontWeight: FontWeight.w400),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       Text(
                         widget.serviceProviderModel.serviceProviderAddress,
-                        style: TextStyle(fontSize: 18),
+                        style: const TextStyle(fontSize: 18),
                       ),
                     ],
                   )
@@ -339,11 +343,11 @@ class _DetailScreenMobileState extends State<DetailScreenMobile> {
               ),
               // Divider(),
               customDivider(color),
-              Text(
+              const Text(
                 "Details:",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Column(
@@ -373,7 +377,7 @@ class _DetailScreenMobileState extends State<DetailScreenMobile> {
                       fontSize: 20,
                     ),
                   )),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   Expanded(
@@ -386,7 +390,18 @@ class _DetailScreenMobileState extends State<DetailScreenMobile> {
                     ),
                   ))
                 ],
-              )
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              const Divider(
+                thickness: 0.5,
+                color: Colors.black,
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              const Footer()
             ],
           ),
         ),
@@ -403,15 +418,15 @@ class _DetailScreenMobileState extends State<DetailScreenMobile> {
               width: 150,
               child: Text(
                 name,
-                style: TextStyle(fontSize: 18),
+                style: const TextStyle(fontSize: 18),
               )),
-          Text(":"),
-          SizedBox(
+          const Text(":"),
+          const SizedBox(
             width: 10,
           ),
           Text(
             value,
-            style: TextStyle(fontSize: 18),
+            style: const TextStyle(fontSize: 18),
           )
         ],
       ),

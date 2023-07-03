@@ -36,6 +36,7 @@ class MyApp extends StatelessWidget {
                 title: 'Arecanut App',
                 routes: {
                   "/main": (context) => const MainPage(),
+                  '/signIn': (context) => const SignInScreen(),
                   "/mainForUser": (context) => const MainPage(),
                   "/mainForProvider": (context) => const MainPageForProvider(),
                 },

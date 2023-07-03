@@ -8,8 +8,7 @@ import '../widgets/show_message.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
-void updateUserData(name,email,phone) async{
-
+void updateUserData(name, email, phone) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
 
   prefs.setString('name', name);
@@ -21,34 +20,32 @@ void updateUserData(name,email,phone) async{
   showToast("Profile Updated Successfully");
 }
 
-
-void updateName(name){
+void updateName(name) {
   _auth.currentUser?.updateDisplayName(name);
   showToast("Your Name is Successfully Updated as $name");
 }
 
-void updateEmail(email){
+void updateEmail(email) {
   _auth.currentUser?.updateEmail(email);
   showToast("Your Email is Successfully Updated as $email");
 }
 
-void updatePhone(phone){
+void updatePhone(phone) {
   _auth.currentUser?.updatePhoneNumber(phone);
   showToast("Your Phone is Successfully Updated as $phone");
 }
 
-void updatePassword(password){
+void updatePassword(password) {
   _auth.currentUser?.updatePhoneNumber(password);
   showToast("Your Password is Successfully Updated");
 }
-
-
 
 // void moveToHomePage(context) {
 //   Navigator.pushNamedAndRemoveUntil(context, "/main", (route) => false);
 // }
 
-Future<String?> signUpWithEmailAndPassword(String email, String password, String name,context) async {
+Future<String?> signUpWithEmailAndPassword(
+    String email, String password, String name, context) async {
   try {
     UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
       email: email,
@@ -71,7 +68,8 @@ Future<String?> signUpWithEmailAndPassword(String email, String password, String
   return null;
 }
 
-Future<String?> signInWithEmailAndPassword(String email, String password) async {
+Future<String?> signInWithEmailAndPassword(
+    String email, String password) async {
   try {
     var userCredential = await _auth.signInWithEmailAndPassword(
       email: email,
@@ -89,11 +87,10 @@ Future<String?> signInWithEmailAndPassword(String email, String password) async 
       Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
       if (data != null && data.containsKey('role')) {
         var role = data['role'] as String;
-        if(role == "user"){
+        if (role == "user") {
           // loginAsUser();
           return 'user';
-        }
-        else if(role == "provider"){
+        } else if (role == "provider") {
           // loginAsProvider();
           return 'provider';
         }
@@ -114,7 +111,8 @@ Future<String?> signInWithEmailAndPassword(String email, String password) async 
 }
 
 ///////////////////////////////////////////////////////////////
-Future<String?> signUpWithEmailAndPasswordForProvider(email,password,name,context) async {
+Future<String?> signUpWithEmailAndPasswordForProvider(
+    email, password, name, context) async {
   try {
     UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
       email: email,
@@ -148,10 +146,7 @@ Future<String> getUserRole() async {
   return userRole ?? ''; // Return an empty string if the value is null
 }
 
-
-
-void addUserData(name,email,phone) async {
-
+void addUserData(name, email, phone) async {
   // SharedPreferences prefs = await SharedPreferences.getInstance();
   //
   // prefs.setString('name', name);
@@ -175,8 +170,13 @@ void addUserData(name,email,phone) async {
   await userRef.doc(userId).set(userData);
 }
 
-void addServiceProviderData(name,address,experience,machines,workers,) async {
-
+void addServiceProviderData(
+  name,
+  address,
+  experience,
+  machines,
+  workers,
+) async {
   // SharedPreferences prefs = await SharedPreferences.getInstance();
   //
   // prefs.setString('name', name);
@@ -205,26 +205,43 @@ void addServiceProviderData(name,address,experience,machines,workers,) async {
   await userRef.doc(userId).set(userData);
 }
 
-bool checkLoggedIn(){
+bool checkLoggedIn() {
   final user = FirebaseAuth.instance.currentUser;
 
-  if(user != null){
+  if (user != null) {
     return true;
-  }
-  else{
+  } else {
     return false;
   }
 }
 
-void sendResetPasswordLink(email) async {
-  await _auth.sendPasswordResetEmail(email: email);
-  showToast('Password reset link sent');
+Future<String> sendResetPasswordLink(email) async {
+  try {
+    await _auth.sendPasswordResetEmail(email: email);
+    // showToast('Password reset link sent');
+    return 'true';
+  } on FirebaseAuthException catch (e) {
+    if (e.code == 'invalid-email') {
+      showToast('Invalid email address');
+      return 'false';
+    } else if (e.code == 'user-not-found') {
+      showToast('User not found');
+      return 'false';
+    } else {
+      showToast('Failed to reset password: ${e.code}');
+      return 'false';
+    }
+    // Handle error and display a message to the user
+  } catch (e) {
+    showToast('Failed to reset password: $e');
+    return 'false';
+    // Handle error and display a message to the user
+  }
+  // return 'false';
+  // await _auth.sendPasswordResetEmail(email: email);
+  // showToast('Password reset link sent');
 }
 
 void logOut() async {
   await _auth.signOut();
 }
-
-
-
-

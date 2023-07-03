@@ -32,48 +32,50 @@ const black = MaterialColor(
   },
 );
 
-class AppColors{
+class AppColors {
   static Color blue = const Color(0xFF146EB4);
   static Color grey = const Color(0xFF959292);
   static Color lightGrey = const Color(0xFF959292);
 }
 
-class Strings{
+class Strings {
+  static const String welcome = "Welcome Back";
+  static const String login = "Login to Your Account";
+  static const String create = "Create An Account";
+  static const String appTitle = "NutXpress";
+  static const String forgotPass = "Forgot Your Password?";
+  static const String notHaveAccount = "Don't have an account?";
+  static const String alreadyHaveAccount = "Already have an account?";
+  // static const String registerAsServiceProvider = "";
+  static const String signIn = "Sign In";
+  static const String signUp = "Sign Up";
 
-    static const String welcome = "Welcome Back";
-    static const String login = "Login to Your Account";
-    static const String create = "Create An Account";
-    static const String appTitle = "NutXpress";
-    static const String forgotPass = "Forgot Your Password?";
-    static const String notHaveAccount = "Don't have an account?";
-    static const String alreadyHaveAccount = "Already have an account?";
-    // static const String registerAsServiceProvider = "";
-    static const String signIn = "Sign In";
-    static const String signUp = "Sign Up";
-
-
-    static const String apiKey = "AIzaSyCAI1yyhlNstjfL3fWxfPub_WJXR7AQDHE";
-
+  static const String apiKey = "AIzaSyCAI1yyhlNstjfL3fWxfPub_WJXR7AQDHE";
 }
 
 class AppInfo {
-  static const String appName = "Printzkart";
-  static const String playStoreLink = "https://play.google.com/store/apps/details?id=com.example.wallpaperapp";
-
+  static const String appName = "NutXpress";
+  static const String contactNumber1 = "9988776655";
+  static const String contactNumber2 = "9988776655";
+  static const String companyEmail = "NutXpress@gmail.com";
+  static const String companyAddress =
+      "Kotekere Hubli Road Sirsi 581402, Karnataka";
+  static const String playStoreLink =
+      "https://play.google.com/store/apps/details?id=com.example.wallpaperapp";
 }
 
-class Images{
-
+class Images {
   static String logo = "assets/images/logos/logo.png";
 
-  static String forgotPassImageLight = "assets/images/Forgot_password_light.png";
-  static String forgotPassImageDark= "assets/images/Forgot_password_dark.png";
+  static String forgotPassImageLight =
+      "assets/images/Forgot_password_light.png";
+  static String forgotPassImageDark = "assets/images/Forgot_password_dark.png";
 
-  static String signInLight= "assets/images/signin(light).png";
-  static String signInDark= "assets/images/signin(dark).png";
+  static String signInLight = "assets/images/signin(light).png";
+  static String signInDark = "assets/images/signin(dark).png";
 
-  static String signupLight= "assets/images/signup(light).png";
-  static String signupDark= "assets/images/signup(dark).png";
+  static String signupLight = "assets/images/signup(light).png";
+  static String signupDark = "assets/images/signup(dark).png";
 
   static String success = "assets/images/success.png";
 
@@ -82,7 +84,7 @@ class Images{
   static String apple = "assets/images/logos/Apple_logo.png";
 }
 
-class AppIcons{
+class AppIcons {
   static String model = "assets/icons/3d_view.png";
   static String modelActive = "assets/icons/3d_view_active.png";
   static String printer = "assets/icons/3d_printer.png";

@@ -10,6 +10,7 @@ import '../../../models/data_models/service_provider_model.dart';
 import '../../../widgets/custom_button.dart';
 import '../../components/carousel/carousel_page.dart';
 import '../../components/drawers/navigation_drawer.dart';
+import '../../components/footer/footer_mobile.dart';
 import '../../components/graph/line_graph.dart';
 import '../../profile/profile.dart';
 import '../../search_page.dart';
@@ -235,7 +236,7 @@ class _HomePageMobileState extends State<HomePageMobile> {
                           machineDocs[index].data() as Map<String, dynamic>;
                       final availability = machineData['status'];
 
-                      return GestureDetector(
+                      return InkWell(
                         onTap: () async {
                           print("clicked");
                           final serviceProviderId =
@@ -360,11 +361,15 @@ class _HomePageMobileState extends State<HomePageMobile> {
                 indent: Dimensions.forty,
                 endIndent: Dimensions.forty,
               ),
+              const SizedBox(
+                height: 15,
+              ),
+              const Footer()
             ],
           ),
         ),
       ),
-      drawer: CustomDrawer(),
+      drawer: const CustomDrawer(),
       // body: ListView.builder(
       //   itemCount: 10,
       //   itemBuilder: (context, index) => Padding(

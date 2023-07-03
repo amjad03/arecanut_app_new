@@ -1,3 +1,4 @@
+import 'package:arecanut_app/screens/auth/sign_in.dart';
 import 'package:flutter/material.dart';
 import '../../constants/constants.dart';
 import '../../constants/dimensions.dart';
@@ -38,6 +39,72 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     var iconColor = Theme.of(context).brightness == Brightness.dark
         ? Colors.grey
         : Colors.black45;
+
+    Future<void> popScreen() async {
+      Navigator.of(context).pop();
+    }
+
+    Future<void> showSuccess(
+      BuildContext context,
+    ) async {
+      return showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Successful!'),
+            content: Text(
+              "We have sent you a password reset link to ${emailController.text},\ncheck your email inbox.(if not found then check your spam folder)",
+              // textAlign: TextAlign.center,
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: const Text(
+                  'OK',
+                  style: TextStyle(color: Colors.grey),
+                ),
+                onPressed: () async {
+                  // await popScreen();
+                  // Navigator.popUntil(context, ModalRoute.withName('/signIn'));
+                  // await Navigator.of(context).pop();
+                  // Navigator.of(context);
+                  Navigator.popUntil(context, ModalRoute.withName('/signIn'));
+                  // Navigator.of(context).pushAndRemoveUntil(
+                  //     MaterialPageRoute(
+                  //         builder: (context) => const SignInScreen()),
+                  //     (Route<dynamic> route) => false);
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+
+    void showSuccessDialog(BuildContext context) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Successful!'),
+            content: Text(
+                "We have sent you a password reset link to ${emailController.text},\ncheck your email inbox.(if not found then check your spam folder)"),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context); // Close the dialog
+                  Navigator.popUntil(
+                      context,
+                      ModalRoute.withName(
+                          '/signIn')); // Pop until the '/signIn' route
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
 
     return Scaffold(
       backgroundColor: bgColor,
@@ -81,249 +148,426 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         left: Dimensions.height20,
                         right: Dimensions.height20,
                         bottom: Dimensions.height20),
-                    child: sent
-                        ? Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          // Image(image: isDark
+                          //     ? AssetImage(Images.forgotPassImageDark)
+                          //     : AssetImage(Images.forgotPassImageLight)
+                          // ),
+                          Text(
+                            Strings.forgotPass,
+                            style: TextStyle(
+                                fontSize: Dimensions.twenty,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Inter'),
+                          ),
+                          SizedBox(
+                            height: Dimensions.height20,
+                          ),
+                          Divider(
+                            indent: Dimensions.forty,
+                            endIndent: Dimensions.forty,
+                          ),
+                          SizedBox(
+                            height: Dimensions.height20,
+                          ),
+                          Text(
+                            "Don’t Worry Write Your Registered email below",
+                            style: TextStyle(
+                                fontSize: Dimensions.fifteen,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'Inter'),
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(
+                            height: Dimensions.height40,
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              // SizedBox(height: Dimensions.height20,),
-                              // SizedBox(
-                              //   width: Dimensions.hundred,
-                              //   child: Image(image: AssetImage(
-                              //       Images.success
-                              //   )),
-                              // ),
-                              SizedBox(
-                                height: Dimensions.height20,
-                              ),
-                              Text(
-                                "We have sent you a password reset link to ${emailController.text},\ncheck your email inbox.(if not found then check your spam folder)",
-                                style: TextStyle(
-                                    fontSize: Dimensions.twenty,
-                                    fontWeight: FontWeight.w400,
-                                    fontFamily: 'Inter'),
-                                textAlign: TextAlign.center,
+                              const Text(
+                                "Email",
+                                style: TextStyle(),
                               ),
                               SizedBox(
-                                height: Dimensions.height40,
+                                height: Dimensions.ten,
                               ),
-                              // TextFormField(
-                              //   controller: emailController,
-                              //   textAlign: TextAlign.start,
-                              //   cursorColor: Colors.grey,
-                              //   // obscureText: show,
-                              //   keyboardType: TextInputType.text,
-                              //   // maxLines: widget.maxLines,
-                              //   decoration: InputDecoration(
-                              //     filled: true,
-                              //     fillColor: Color(0xFFEBEBEB),
-                              //     focusColor: Colors.grey,
-                              //     contentPadding: EdgeInsets.symmetric(horizontal: Dimensions.fifteen, vertical: Dimensions.ten),
-                              //     label: Text(""),
-                              //     prefixIcon: Icon(
-                              //       Icons.email,
-                              //       color: Colors.grey,
-                              //     ),
-                              //     // suffixIcon: widget.password
-                              //     //     ? show
-                              //     //     ? IconButton(
-                              //     //   icon: const Icon(
-                              //     //     Icons.visibility,
-                              //     //     color: Colors.grey,
-                              //     //   ),
-                              //     //   onPressed: () {
-                              //     //     setState(() {
-                              //     //       show = !show;
-                              //     //     });
-                              //     //   },
-                              //     // )
-                              //     //     : IconButton(
-                              //     //   icon: const Icon(
-                              //     //     Icons.visibility_off,
-                              //     //     color: Colors.grey,
-                              //     //   ),
-                              //     //   onPressed: () {
-                              //     //     setState(() {
-                              //     //       show = !show;
-                              //     //     });
-                              //     //   },
-                              //     // )
-                              //     //     : null,
-                              //     border: InputBorder.none,
-                              //     iconColor: iconColor,
-                              //     labelStyle: TextStyle(color: iconColor),
-                              //   ),
-                              //   validator: (value) {
-                              //     if (value == null || !isEmail(value)) {
-                              //       return "Please enter a valid email address";
-                              //     }
-                              //     else {
-                              //       return null;
-                              //     }
-                              //   },
-                              // ),
-                              // CustomInputField(controller: emailController, icon: Icons.email, label: "Enter Your Registered Email", password: false, phoneNumber: false,maxLines: 1, isFor: 'Email',),
-                              // SizedBox(height: Dimensions.height20,),
-                              SizedBox(
-                                width: double.infinity,
-                                child: CustomButton(
-                                  title: "OK",
-                                  onPressed: () {
-                                    setState(() {
-                                      sent = !sent;
-                                    });
-                                    Navigator.of(context).pop();
-                                  },
-                                  fontSize: Dimensions.fifteen,
+                              TextFormField(
+                                controller: emailController,
+                                textAlign: TextAlign.start,
+                                cursorColor: Colors.grey,
+                                // obscureText: show,
+                                keyboardType: TextInputType.text,
+                                // maxLines: widget.maxLines,
+                                decoration: InputDecoration(
+                                  filled: true,
+                                  fillColor: const Color(0xFFEBEBEB),
+                                  focusColor: Colors.grey,
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: Dimensions.fifteen,
+                                      vertical: Dimensions.ten),
+                                  hintText: "Enter Your Registered Email",
+                                  prefixIcon: const Icon(
+                                    Icons.email,
+                                    color: Colors.grey,
+                                  ),
+                                  // suffixIcon: widget.password
+                                  //     ? show
+                                  //     ? IconButton(
+                                  //   icon: const Icon(
+                                  //     Icons.visibility,
+                                  //     color: Colors.grey,
+                                  //   ),
+                                  //   onPressed: () {
+                                  //     setState(() {
+                                  //       show = !show;
+                                  //     });
+                                  //   },
+                                  // )
+                                  //     : IconButton(
+                                  //   icon: const Icon(
+                                  //     Icons.visibility_off,
+                                  //     color: Colors.grey,
+                                  //   ),
+                                  //   onPressed: () {
+                                  //     setState(() {
+                                  //       show = !show;
+                                  //     });
+                                  //   },
+                                  // )
+                                  //     : null,
+                                  border: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.circular(Dimensions.ten),
+                                    borderSide: BorderSide.none,
+                                  ),
+                                  iconColor: iconColor,
+                                  labelStyle: TextStyle(color: iconColor),
                                 ),
+                                validator: (value) {
+                                  if (value == null ||
+                                      value.toString().isEmpty) {
+                                    return "Email is required";
+                                  } else if (!isEmail(value)) {
+                                    return "Please enter a valid email address";
+                                  } else {
+                                    return null;
+                                  }
+                                },
                               ),
                             ],
-                          )
-                        : Form(
-                            key: _formKey,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                // Image(image: isDark
-                                //     ? AssetImage(Images.forgotPassImageDark)
-                                //     : AssetImage(Images.forgotPassImageLight)
-                                // ),
-                                Text(
-                                  Strings.forgotPass,
-                                  style: TextStyle(
-                                      fontSize: Dimensions.twenty,
-                                      fontWeight: FontWeight.w400,
-                                      fontFamily: 'Inter'),
-                                ),
-                                SizedBox(
-                                  height: Dimensions.height20,
-                                ),
-                                // Divider(indent: Dimensions.forty, endIndent: Dimensions.forty,),
-                                SizedBox(
-                                  height: Dimensions.height20,
-                                ),
-                                Text(
-                                  "Don’t Worry Write Your Registered email below",
-                                  style: TextStyle(
-                                      fontSize: Dimensions.fifteen,
-                                      fontWeight: FontWeight.w400,
-                                      fontFamily: 'Inter'),
-                                  textAlign: TextAlign.center,
-                                ),
-                                SizedBox(
-                                  height: Dimensions.height40,
-                                ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Email",
-                                      style: TextStyle(),
-                                    ),
-                                    SizedBox(
-                                      height: Dimensions.ten,
-                                    ),
-                                    TextFormField(
-                                      controller: emailController,
-                                      textAlign: TextAlign.start,
-                                      cursorColor: Colors.grey,
-                                      // obscureText: show,
-                                      keyboardType: TextInputType.text,
-                                      // maxLines: widget.maxLines,
-                                      decoration: InputDecoration(
-                                        filled: true,
-                                        fillColor: Color(0xFFEBEBEB),
-                                        focusColor: Colors.grey,
-                                        contentPadding: EdgeInsets.symmetric(
-                                            horizontal: Dimensions.fifteen,
-                                            vertical: Dimensions.ten),
-                                        hintText: "Enter Your Registered Email",
-                                        prefixIcon: Icon(
-                                          Icons.email,
-                                          color: Colors.grey,
-                                        ),
-                                        // suffixIcon: widget.password
-                                        //     ? show
-                                        //     ? IconButton(
-                                        //   icon: const Icon(
-                                        //     Icons.visibility,
-                                        //     color: Colors.grey,
-                                        //   ),
-                                        //   onPressed: () {
-                                        //     setState(() {
-                                        //       show = !show;
-                                        //     });
-                                        //   },
-                                        // )
-                                        //     : IconButton(
-                                        //   icon: const Icon(
-                                        //     Icons.visibility_off,
-                                        //     color: Colors.grey,
-                                        //   ),
-                                        //   onPressed: () {
-                                        //     setState(() {
-                                        //       show = !show;
-                                        //     });
-                                        //   },
-                                        // )
-                                        //     : null,
-                                        border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              Dimensions.ten),
-                                          borderSide: BorderSide.none,
-                                        ),
-                                        iconColor: iconColor,
-                                        labelStyle: TextStyle(color: iconColor),
-                                      ),
-                                      validator: (value) {
-                                        if (value == null ||
-                                            value.toString().isEmpty) {
-                                          return "Email is required";
-                                        } else if (!isEmail(value)) {
-                                          return "Please enter a valid email address";
-                                        } else {
-                                          return null;
-                                        }
-                                      },
-                                    ),
-                                  ],
-                                ),
-                                // CustomInputField(controller: emailController, icon: Icons.email, label: "Enter Your Registered Email", password: false, phoneNumber: false,maxLines: 1, isFor: 'Email',),
-                                SizedBox(
-                                  height: Dimensions.height20,
-                                ),
-                                SizedBox(
-                                  width: double.infinity,
-                                  child: CustomButton(
-                                    title: "Send Reset Link",
-                                    onPressed: () {
-                                      if (_formKey.currentState!.validate()) {
-                                        setState(() {
-                                          sent = !sent;
-                                        });
-                                        setState(() {
-                                          isLoading = true;
-                                        });
-                                        sendResetPasswordLink(
-                                            emailController.text.trim());
-                                        setState(() {
-                                          isLoading = false;
-                                        });
-                                      }
-                                    },
-                                    fontSize: Dimensions.fifteen,
-                                  ),
-                                ),
-                                TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    child: Text("<<Go back"))
-                              ],
+                          ),
+                          // CustomInputField(controller: emailController, icon: Icons.email, label: "Enter Your Registered Email", password: false, phoneNumber: false,maxLines: 1, isFor: 'Email',),
+                          SizedBox(
+                            height: Dimensions.height20,
+                          ),
+                          SizedBox(
+                            width: double.infinity,
+                            child: CustomButton(
+                              title: "Send Reset Link",
+                              onPressed: () async {
+                                if (_formKey.currentState!.validate()) {
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+                                  // Future.delayed(
+                                  //   const Duration(seconds: 2),
+                                  //   () => sendResetPasswordLink(
+                                  //       emailController.text.trim()),
+                                  // );
+                                  String? res = await sendResetPasswordLink(
+                                      emailController.text.trim());
+
+                                  if (res == 'true') {
+                                    showSuccessDialog(context);
+                                  }
+                                  setState(() {
+                                    isLoading = false;
+                                  });
+                                  // setState(() {
+                                  //   sent = !sent;
+                                  // });
+                                }
+                              },
+                              fontSize: Dimensions.fifteen,
                             ),
                           ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text(
+                                "<<Go back",
+                                style: TextStyle(fontSize: 20),
+                              ))
+                        ],
+                      ),
+                    ),
+                    // sent
+                    //     ? Column(
+                    //         mainAxisAlignment: MainAxisAlignment.center,
+                    //         crossAxisAlignment: CrossAxisAlignment.center,
+                    //         children: [
+                    //           // SizedBox(height: Dimensions.height20,),
+                    //           // SizedBox(
+                    //           //   width: Dimensions.hundred,
+                    //           //   child: Image(image: AssetImage(
+                    //           //       Images.success
+                    //           //   )),
+                    //           // ),
+                    //           SizedBox(
+                    //             height: Dimensions.height20,
+                    //           ),
+                    //           Text(
+                    //             "We have sent you a password reset link to ${emailController.text},\ncheck your email inbox.(if not found then check your spam folder)",
+                    //             style: const TextStyle(
+                    //                 fontSize: 18,
+                    //                 fontWeight: FontWeight.w400,
+                    //                 fontFamily: 'Inter'),
+                    //             textAlign: TextAlign.center,
+                    //           ),
+                    //           SizedBox(
+                    //             height: Dimensions.height40,
+                    //           ),
+                    //           // TextFormField(
+                    //           //   controller: emailController,
+                    //           //   textAlign: TextAlign.start,
+                    //           //   cursorColor: Colors.grey,
+                    //           //   // obscureText: show,
+                    //           //   keyboardType: TextInputType.text,
+                    //           //   // maxLines: widget.maxLines,
+                    //           //   decoration: InputDecoration(
+                    //           //     filled: true,
+                    //           //     fillColor: Color(0xFFEBEBEB),
+                    //           //     focusColor: Colors.grey,
+                    //           //     contentPadding: EdgeInsets.symmetric(horizontal: Dimensions.fifteen, vertical: Dimensions.ten),
+                    //           //     label: Text(""),
+                    //           //     prefixIcon: Icon(
+                    //           //       Icons.email,
+                    //           //       color: Colors.grey,
+                    //           //     ),
+                    //           //     // suffixIcon: widget.password
+                    //           //     //     ? show
+                    //           //     //     ? IconButton(
+                    //           //     //   icon: const Icon(
+                    //           //     //     Icons.visibility,
+                    //           //     //     color: Colors.grey,
+                    //           //     //   ),
+                    //           //     //   onPressed: () {
+                    //           //     //     setState(() {
+                    //           //     //       show = !show;
+                    //           //     //     });
+                    //           //     //   },
+                    //           //     // )
+                    //           //     //     : IconButton(
+                    //           //     //   icon: const Icon(
+                    //           //     //     Icons.visibility_off,
+                    //           //     //     color: Colors.grey,
+                    //           //     //   ),
+                    //           //     //   onPressed: () {
+                    //           //     //     setState(() {
+                    //           //     //       show = !show;
+                    //           //     //     });
+                    //           //     //   },
+                    //           //     // )
+                    //           //     //     : null,
+                    //           //     border: InputBorder.none,
+                    //           //     iconColor: iconColor,
+                    //           //     labelStyle: TextStyle(color: iconColor),
+                    //           //   ),
+                    //           //   validator: (value) {
+                    //           //     if (value == null || !isEmail(value)) {
+                    //           //       return "Please enter a valid email address";
+                    //           //     }
+                    //           //     else {
+                    //           //       return null;
+                    //           //     }
+                    //           //   },
+                    //           // ),
+                    //           // CustomInputField(controller: emailController, icon: Icons.email, label: "Enter Your Registered Email", password: false, phoneNumber: false,maxLines: 1, isFor: 'Email',),
+                    //           // SizedBox(height: Dimensions.height20,),
+                    //           SizedBox(
+                    //             width: double.infinity,
+                    //             child: CustomButton(
+                    //               title: "OK",
+                    //               onPressed: () {
+                    //                 setState(() {
+                    //                   sent = !sent;
+                    //                 });
+                    //                 Navigator.of(context).pop();
+                    //               },
+                    //               fontSize: Dimensions.fifteen,
+                    //             ),
+                    //           ),
+                    //         ],
+                    //       )
+                    //     : Form(
+                    //         key: _formKey,
+                    //         child: Column(
+                    //           mainAxisAlignment: MainAxisAlignment.center,
+                    //           crossAxisAlignment: CrossAxisAlignment.center,
+                    //           children: [
+                    //             // Image(image: isDark
+                    //             //     ? AssetImage(Images.forgotPassImageDark)
+                    //             //     : AssetImage(Images.forgotPassImageLight)
+                    //             // ),
+                    //             Text(
+                    //               Strings.forgotPass,
+                    //               style: TextStyle(
+                    //                   fontSize: Dimensions.twenty,
+                    //                   fontWeight: FontWeight.w400,
+                    //                   fontFamily: 'Inter'),
+                    //             ),
+                    //             SizedBox(
+                    //               height: Dimensions.height20,
+                    //             ),
+                    //             Divider(
+                    //               indent: Dimensions.forty,
+                    //               endIndent: Dimensions.forty,
+                    //             ),
+                    //             SizedBox(
+                    //               height: Dimensions.height20,
+                    //             ),
+                    //             Text(
+                    //               "Don’t Worry Write Your Registered email below",
+                    //               style: TextStyle(
+                    //                   fontSize: Dimensions.fifteen,
+                    //                   fontWeight: FontWeight.w400,
+                    //                   fontFamily: 'Inter'),
+                    //               textAlign: TextAlign.center,
+                    //             ),
+                    //             SizedBox(
+                    //               height: Dimensions.height40,
+                    //             ),
+                    //             Column(
+                    //               mainAxisAlignment: MainAxisAlignment.start,
+                    //               crossAxisAlignment: CrossAxisAlignment.start,
+                    //               children: [
+                    //                 const Text(
+                    //                   "Email",
+                    //                   style: TextStyle(),
+                    //                 ),
+                    //                 SizedBox(
+                    //                   height: Dimensions.ten,
+                    //                 ),
+                    //                 TextFormField(
+                    //                   controller: emailController,
+                    //                   textAlign: TextAlign.start,
+                    //                   cursorColor: Colors.grey,
+                    //                   // obscureText: show,
+                    //                   keyboardType: TextInputType.text,
+                    //                   // maxLines: widget.maxLines,
+                    //                   decoration: InputDecoration(
+                    //                     filled: true,
+                    //                     fillColor: const Color(0xFFEBEBEB),
+                    //                     focusColor: Colors.grey,
+                    //                     contentPadding: EdgeInsets.symmetric(
+                    //                         horizontal: Dimensions.fifteen,
+                    //                         vertical: Dimensions.ten),
+                    //                     hintText: "Enter Your Registered Email",
+                    //                     prefixIcon: const Icon(
+                    //                       Icons.email,
+                    //                       color: Colors.grey,
+                    //                     ),
+                    //                     // suffixIcon: widget.password
+                    //                     //     ? show
+                    //                     //     ? IconButton(
+                    //                     //   icon: const Icon(
+                    //                     //     Icons.visibility,
+                    //                     //     color: Colors.grey,
+                    //                     //   ),
+                    //                     //   onPressed: () {
+                    //                     //     setState(() {
+                    //                     //       show = !show;
+                    //                     //     });
+                    //                     //   },
+                    //                     // )
+                    //                     //     : IconButton(
+                    //                     //   icon: const Icon(
+                    //                     //     Icons.visibility_off,
+                    //                     //     color: Colors.grey,
+                    //                     //   ),
+                    //                     //   onPressed: () {
+                    //                     //     setState(() {
+                    //                     //       show = !show;
+                    //                     //     });
+                    //                     //   },
+                    //                     // )
+                    //                     //     : null,
+                    //                     border: OutlineInputBorder(
+                    //                       borderRadius: BorderRadius.circular(
+                    //                           Dimensions.ten),
+                    //                       borderSide: BorderSide.none,
+                    //                     ),
+                    //                     iconColor: iconColor,
+                    //                     labelStyle: TextStyle(color: iconColor),
+                    //                   ),
+                    //                   validator: (value) {
+                    //                     if (value == null ||
+                    //                         value.toString().isEmpty) {
+                    //                       return "Email is required";
+                    //                     } else if (!isEmail(value)) {
+                    //                       return "Please enter a valid email address";
+                    //                     } else {
+                    //                       return null;
+                    //                     }
+                    //                   },
+                    //                 ),
+                    //               ],
+                    //             ),
+                    //             // CustomInputField(controller: emailController, icon: Icons.email, label: "Enter Your Registered Email", password: false, phoneNumber: false,maxLines: 1, isFor: 'Email',),
+                    //             SizedBox(
+                    //               height: Dimensions.height20,
+                    //             ),
+                    //             SizedBox(
+                    //               width: double.infinity,
+                    //               child: CustomButton(
+                    //                 title: "Send Reset Link",
+                    //                 onPressed: () {
+                    //                   if (_formKey.currentState!.validate()) {
+                    //                     setState(() {
+                    //                       isLoading = true;
+                    //                     });
+                    //                     Future.delayed(
+                    //                       const Duration(seconds: 2),
+                    //                       () => sendResetPasswordLink(
+                    //                           emailController.text.trim()),
+                    //                     );
+                    //                     // sendResetPasswordLink(
+                    //                     //     emailController.text.trim());
+                    //                     setState(() {
+                    //                       isLoading = false;
+                    //                     });
+                    //                     // setState(() {
+                    //                     //   sent = !sent;
+                    //                     // });
+                    //                   }
+                    //                 },
+                    //                 fontSize: Dimensions.fifteen,
+                    //               ),
+                    //             ),
+                    //             const SizedBox(
+                    //               height: 10,
+                    //             ),
+                    //             TextButton(
+                    //                 onPressed: () {
+                    //                   Navigator.pop(context);
+                    //                 },
+                    //                 child: const Text(
+                    //                   "<<Go back",
+                    //                   style: TextStyle(fontSize: 20),
+                    //                 ))
+                    //           ],
+                    //         ),
+                    //       ),
                   ),
                 ),
               ),

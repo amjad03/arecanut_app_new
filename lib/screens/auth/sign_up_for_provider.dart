@@ -97,6 +97,10 @@ class _SignUpScreenForProviderState extends State<SignUpScreenForProvider> {
                           SizedBox(
                             height: Dimensions.height20,
                           ),
+                          Divider(
+                            indent: Dimensions.forty,
+                            endIndent: Dimensions.forty,
+                          ),
                           SizedBox(
                             height: Dimensions.height20,
                           ),

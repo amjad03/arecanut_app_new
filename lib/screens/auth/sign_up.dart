@@ -88,6 +88,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           SizedBox(
                             height: Dimensions.height20,
                           ),
+                          Divider(
+                            indent: Dimensions.forty,
+                            endIndent: Dimensions.forty,
+                          ),
                           SizedBox(
                             height: Dimensions.height20,
                           ),
