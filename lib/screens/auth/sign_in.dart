@@ -43,6 +43,14 @@ class _SignInScreenState extends State<SignInScreen> {
         ? Colors.grey
         : Colors.black45;
 
+    var bg = Theme.of(context).brightness == Brightness.dark
+        ? Colors.grey.shade700
+        : Colors.grey.shade200;
+
+    var color = Theme.of(context).brightness == Brightness.dark
+        ? Colors.grey.shade800
+        : Colors.grey.shade300;
+
     return Scaffold(
       backgroundColor: bgColor,
       // resizeToAvoidBottomInset: false,
@@ -61,7 +69,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 width: 450,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
-                    color: Colors.white,
+                    color: bg,
                     boxShadow: const [
                       BoxShadow(color: Colors.black38, blurRadius: 10)
                     ]),
@@ -133,7 +141,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                   keyboardType: TextInputType.text,
                                   decoration: InputDecoration(
                                     filled: true,
-                                    fillColor: Color(0xFFEBEBEB),
+                                    fillColor: color,
                                     focusColor: Colors.grey,
                                     contentPadding: EdgeInsets.symmetric(
                                         horizontal: Dimensions.fifteen,
@@ -172,7 +180,7 @@ class _SignInScreenState extends State<SignInScreen> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
+                                const Text(
                                   "Password",
                                   style: TextStyle(),
                                 ),
@@ -187,7 +195,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                   keyboardType: TextInputType.text,
                                   decoration: InputDecoration(
                                     filled: true,
-                                    fillColor: Color(0xFFEBEBEB),
+                                    fillColor: color,
                                     focusColor: Colors.grey,
                                     contentPadding: EdgeInsets.symmetric(
                                         horizontal: Dimensions.fifteen,

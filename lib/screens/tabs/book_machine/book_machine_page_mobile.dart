@@ -1,9 +1,11 @@
+import 'package:arecanut_app/widgets/show_message.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../../../services/machine_booking_service.dart';
 import '../../../widgets/custom_button.dart';
 import '../../components/footer/footer_mobile.dart';
 
@@ -21,7 +23,9 @@ class BookMachineMobile extends StatefulWidget {
       required this.rating,
       required this.distance,
       required this.totalRatings,
-      required this.address})
+      required this.address,
+      required this.machineId,
+      required this.serviceProviderId})
       : super(key: key);
 
   final String title;
@@ -31,6 +35,8 @@ class BookMachineMobile extends StatefulWidget {
   final String distance;
   final String totalRatings;
   final String address;
+  final String machineId;
+  final String serviceProviderId;
 
   @override
   State<BookMachineMobile> createState() => _BookMachineMobileState();
@@ -39,6 +45,8 @@ class BookMachineMobile extends StatefulWidget {
 class _BookMachineMobileState extends State<BookMachineMobile> {
   final qtyController = TextEditingController();
   double qty = 0.0;
+
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -57,349 +65,392 @@ class _BookMachineMobileState extends State<BookMachineMobile> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 10,
-              ),
-              const Divider(
-                indent: 30,
-                endIndent: 30,
-                thickness: 0.5,
-                color: Colors.black,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              const Text(
-                "Book Machine",
-                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: Container(
-                        height: 160,
-                        width: 120,
-                        color: Colors.grey,
-                        child: Image.network(
-                          widget.image,
-                          fit: BoxFit.cover,
-                        )),
+      body: Stack(children: [
+        SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 10,
+                ),
+                const Divider(
+                  indent: 30,
+                  endIndent: 30,
+                  thickness: 0.5,
+                  color: Colors.black,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                const Text(
+                  "Book Machine",
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Container(
+                          height: 160,
+                          width: 120,
+                          color: Colors.grey,
+                          child: Image.network(
+                            widget.image,
+                            fit: BoxFit.cover,
+                          )),
+                    ),
+                    const SizedBox(
+                      width: 15,
+                    ),
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.title,
+                            style: const TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          customSizedBox(),
+                          Row(
+                            children: [
+                              Text(
+                                widget.rating.toString(),
+                                style: const TextStyle(
+                                    fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              RatingBar.builder(
+                                initialRating: double.parse(
+                                    widget.rating), // The rating value
+                                minRating: 1, // Minimum rating value
+                                direction: Axis
+                                    .horizontal, // The direction of the rating bar
+                                allowHalfRating:
+                                    true, // Allow half ratings (e.g., 3.5 stars)
+                                itemCount: 5, // Total number of stars
+                                itemSize: 25, // Size of each star
+                                itemBuilder: (context, _) => const Icon(
+                                  Icons.star,
+                                  color:
+                                      Colors.orange, // Color of the filled star
+                                ),
+                                onRatingUpdate: (rating) {
+                                  // Callback function when the rating is updated
+                                  if (kDebugMode) {
+                                    print(rating);
+                                  }
+                                },
+                              ),
+                              const SizedBox(
+                                width: 15,
+                              ),
+                              Text(
+                                "${widget.totalRatings} ratings",
+                                style: const TextStyle(fontSize: 16),
+                              ),
+                            ],
+                          ),
+                          customSizedBox(),
+                          Text(
+                            widget.address,
+                            style: const TextStyle(fontSize: 16, height: 1.5),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          customSizedBox(),
+                          Row(
+                            children: [
+                              Text(
+                                "Rs : ₹ $formattedPrice /- ",
+                                style:
+                                    const TextStyle(fontSize: 22, height: 1.5),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              Text(
+                                "per 100kg (Rs.$perKg per kg)",
+                                style:
+                                    const TextStyle(fontSize: 14, height: 1.5),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
+                          ),
+                          customSizedBox(),
+                          Text(
+                            "Distance: ${widget.distance} km away",
+                            style: const TextStyle(fontSize: 18, height: 1.5),
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                const Divider(
+                  thickness: 0.5,
+                  color: Colors.black,
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Fill the below Details",
+                    style: TextStyle(fontSize: 22),
                   ),
-                  const SizedBox(
-                    width: 15,
-                  ),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                ),
+                const SizedBox(
+                  height: 25,
+                ),
+                Row(
+                  children: [
+                    // SizedBox(
+                    //   width: 150,
+                    //   child: Row(
+                    //     children: const [
+                    //       Text(
+                    //         "Select Date ",
+                    //         style: TextStyle(fontSize: 18),
+                    //       ),
+                    //       Text(
+                    //         "*",
+                    //         style: TextStyle(fontSize: 18, color: Colors.red),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
+                    // const Text(
+                    //   ":",
+                    //   style: TextStyle(fontSize: 20),
+                    // ),
+                    // const SizedBox(
+                    //   width: 15,
+                    // ),
+                    textAndInputWidget("Select Date", false),
+                    const DatePicker()
+                  ],
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                Row(
+                  children: [
+                    textAndInputWidget("Add Quantity", false),
+                    Expanded(
+                        child: SizedBox(
+                      height: 50,
+                      child: TextField(
+                        controller: qtyController,
+                        decoration: InputDecoration(
+                            hintText: "eg: 120",
+                            border: OutlineInputBorder(
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(5.0)),
+                              borderSide: BorderSide(
+                                color: color,
+                                width: 1.0,
+                              ),
+                            ),
+                            suffixText: "KG"),
+                        onChanged: (val) {
+                          setState(() {
+                            var v = val;
+                            // qty = double.parse(v);
+                            qty = double.tryParse(v) ?? 0.0;
+                          });
+                        },
+                        keyboardType: TextInputType.number,
+                      ),
+                    ))
+                  ],
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                Row(
+                  children: [
+                    textAndInputWidget("Select Type", false),
+                    const Expanded(child: DropDown()
+                        //     Container(
+                        //   height: 50,
+                        //   child: TextField(
+                        //     decoration: InputDecoration(
+                        //       hintText: "eg: Chali",
+                        //       border: OutlineInputBorder(
+                        //         borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                        //         borderSide: BorderSide(
+                        //           color: color,
+                        //           width: 1.0,
+                        //         ),
+                        //       ),
+                        //     ),
+                        //     keyboardType: TextInputType.number,
+                        //   ),
+                        // )
+                        )
+                  ],
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                const Divider(
+                  thickness: 0.5,
+                  color: Colors.black,
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                Row(
+                  // crossAxisAlignment: CrossAxisAlignment.,
+                  // mainAxisAlignment: MainAxisAlignment.,
+                  children: [
+                    SizedBox(
+                      width: 120,
+                      height: 60,
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: const [
+                            Text(
+                              "Total Price",
+                              style: TextStyle(
+                                  fontSize: 22, fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              ":",
+                              style: TextStyle(
+                                  fontSize: 22, fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 15,
+                    ),
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          widget.title,
+                          "Rs : ₹ $formattedTotal /-",
                           style: const TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                              fontSize: 22, fontWeight: FontWeight.bold),
                         ),
-                        customSizedBox(),
-                        Row(
-                          children: [
-                            Text(
-                              widget.rating.toString(),
-                              style: const TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            RatingBar.builder(
-                              initialRating: double.parse(
-                                  widget.rating), // The rating value
-                              minRating: 1, // Minimum rating value
-                              direction: Axis
-                                  .horizontal, // The direction of the rating bar
-                              allowHalfRating:
-                                  true, // Allow half ratings (e.g., 3.5 stars)
-                              itemCount: 5, // Total number of stars
-                              itemSize: 25, // Size of each star
-                              itemBuilder: (context, _) => const Icon(
-                                Icons.star,
-                                color:
-                                    Colors.orange, // Color of the filled star
-                              ),
-                              onRatingUpdate: (rating) {
-                                // Callback function when the rating is updated
-                                if (kDebugMode) {
-                                  print(rating);
-                                }
-                              },
-                            ),
-                            const SizedBox(
-                              width: 15,
-                            ),
-                            Text(
-                              "${widget.totalRatings} ratings",
-                              style: const TextStyle(fontSize: 16),
-                            ),
-                          ],
+                        const SizedBox(
+                          height: 10,
                         ),
-                        customSizedBox(),
                         Text(
-                          widget.address,
-                          style: const TextStyle(fontSize: 16, height: 1.5),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                          "${qty}kg x Rs.$perKg(per Kg) = Rs. $formattedTotal",
+                          style: const TextStyle(fontSize: 18),
                         ),
-                        customSizedBox(),
-                        Row(
-                          children: [
-                            Text(
-                              "Rs : ₹ $formattedPrice /- ",
-                              style: const TextStyle(fontSize: 22, height: 1.5),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            Text(
-                              "per 100kg (Rs.$perKg per kg)",
-                              style: const TextStyle(fontSize: 14, height: 1.5),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ],
-                        ),
-                        customSizedBox(),
-                        Text(
-                          "Distance: ${widget.distance} km away",
-                          style: const TextStyle(fontSize: 18, height: 1.5),
-                        )
                       ],
-                    ),
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              const Divider(
-                thickness: 0.5,
-                color: Colors.black,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              const Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  "Fill the below Details",
-                  style: TextStyle(fontSize: 22),
+                    )
+                  ],
                 ),
-              ),
-              const SizedBox(
-                height: 25,
-              ),
-              Row(
-                children: [
-                  // SizedBox(
-                  //   width: 150,
-                  //   child: Row(
-                  //     children: const [
-                  //       Text(
-                  //         "Select Date ",
-                  //         style: TextStyle(fontSize: 18),
-                  //       ),
-                  //       Text(
-                  //         "*",
-                  //         style: TextStyle(fontSize: 18, color: Colors.red),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
-                  // const Text(
-                  //   ":",
-                  //   style: TextStyle(fontSize: 20),
-                  // ),
-                  // const SizedBox(
-                  //   width: 15,
-                  // ),
-                  textAndInputWidget("Select Date", false),
-                  const DatePicker()
-                ],
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              Row(
-                children: [
-                  textAndInputWidget("Add Quantity", false),
-                  Expanded(
-                      child: Container(
-                    height: 50,
-                    child: TextField(
-                      controller: qtyController,
-                      decoration: InputDecoration(
-                          hintText: "eg: 120",
-                          border: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(5.0)),
-                            borderSide: BorderSide(
-                              color: color,
-                              width: 1.0,
-                            ),
-                          ),
-                          suffixText: "KG"),
-                      onChanged: (val) {
-                        setState(() {
-                          var v = val ?? '0';
-                          // qty = double.parse(v);
-                          qty = double.tryParse(v) ?? 0.0;
-                        });
-                      },
-                      keyboardType: TextInputType.number,
-                    ),
-                  ))
-                ],
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              Row(
-                children: [
-                  textAndInputWidget("Select Type", false),
-                  const Expanded(child: DropDown()
-                      //     Container(
-                      //   height: 50,
-                      //   child: TextField(
-                      //     decoration: InputDecoration(
-                      //       hintText: "eg: Chali",
-                      //       border: OutlineInputBorder(
-                      //         borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                      //         borderSide: BorderSide(
-                      //           color: color,
-                      //           width: 1.0,
-                      //         ),
-                      //       ),
-                      //     ),
-                      //     keyboardType: TextInputType.number,
-                      //   ),
-                      // )
-                      )
-                ],
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              const Divider(
-                thickness: 0.5,
-                color: Colors.black,
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              Row(
-                // crossAxisAlignment: CrossAxisAlignment.,
-                // mainAxisAlignment: MainAxisAlignment.,
-                children: [
-                  SizedBox(
-                    width: 120,
-                    height: 60,
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Total Price",
-                            style: TextStyle(
-                                fontSize: 22, fontWeight: FontWeight.bold),
-                          ),
-                          Text(
-                            ":",
-                            style: TextStyle(
-                                fontSize: 22, fontWeight: FontWeight.bold),
-                          ),
-                        ],
+                const SizedBox(
+                  height: 25,
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                        child: SizedBox(
+                      height: 50,
+                      child: CustomOutlineButton(
+                        title: "Cancel",
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        fontSize: 18,
                       ),
+                    )),
+                    const SizedBox(
+                      width: 10,
                     ),
-                  ),
-                  SizedBox(
-                    width: 15,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Rs : ₹ $formattedTotal /-",
-                        style: TextStyle(
-                            fontSize: 22, fontWeight: FontWeight.bold),
+                    Expanded(
+                        child: SizedBox(
+                      height: 50,
+                      child: CustomButton(
+                        title: "Confirm Booking",
+                        onPressed: () {
+                          setState(() {
+                            isLoading = true;
+                          });
+                          bookMachine(
+                              "name",
+                              "email",
+                              "phone",
+                              "address",
+                              "occupation",
+                              widget.machineId,
+                              widget.serviceProviderId,
+                              date,
+                              qty,
+                              type);
+
+                          setState(() {
+                            isLoading = false;
+                          });
+                          showSuccessSheet(context);
+                          // showToast("Booked Successfully");
+                          // Future.delayed(const Duration(seconds: 2), () {
+                          //   setState(() {
+                          //     isLoading = false;
+                          //   });
+                          //   showToast("Booked Successfully");
+                          // });
+                          // showToast("Booked Successfully");
+                        },
+                        fontSize: 18,
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        "${qty}kg x Rs.$perKg(per Kg) = Rs. $formattedTotal",
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 25,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                      child: SizedBox(
-                    height: 50,
-                    child: CustomOutlineButton(
-                      title: "Cancel",
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      fontSize: 18,
-                    ),
-                  )),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Expanded(
-                      child: SizedBox(
-                    height: 50,
-                    child: CustomButton(
-                      title: "Confirm Booking",
-                      onPressed: () {},
-                      fontSize: 18,
-                    ),
-                  ))
-                ],
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              const Divider(
-                thickness: 0.5,
-                color: Colors.black,
-              ),
-              const SizedBox(
-                height: 15,
-              ),
-              const Footer()
-            ],
+                    ))
+                  ],
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                const Divider(
+                  thickness: 0.5,
+                  color: Colors.black,
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                const Footer()
+              ],
+            ),
           ),
         ),
-      ),
+        if (isLoading)
+          const Opacity(
+            opacity: 0.4,
+            child: ModalBarrier(dismissible: false, color: Colors.black),
+          ),
+        if (isLoading)
+          const Center(
+            child: CircularProgressIndicator(
+              color: Colors.white,
+            ),
+          ),
+      ]),
     );
   }
 
@@ -418,7 +469,7 @@ class _BookMachineMobileState extends State<BookMachineMobile> {
             children: [
               Text(
                 "$text ",
-                style: TextStyle(fontSize: 18),
+                style: const TextStyle(fontSize: 18),
               ),
               if (!opt)
                 const Text(
@@ -436,6 +487,58 @@ class _BookMachineMobileState extends State<BookMachineMobile> {
           width: 15,
         ),
       ],
+    );
+  }
+
+  void showSuccessSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return DraggableScrollableSheet(
+          expand: false,
+          builder: (BuildContext context, ScrollController scrollController) {
+            return Container(
+              color: Colors.white,
+              child: ListView(
+                controller: scrollController,
+                children: [
+                  Container(
+                    padding: EdgeInsets.all(16),
+                    child: Column(
+                      children: [
+                        const Icon(Icons.check_circle,
+                            color: Colors.green, size: 100),
+                        const SizedBox(height: 16),
+                        const Text(
+                          'Success!',
+                          style: TextStyle(
+                              fontSize: 30, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 16),
+                        ElevatedButton(
+                          style: ButtonStyle(
+                              shape: MaterialStateProperty.all(
+                                  RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(20)))),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text('Ok'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }
@@ -464,6 +567,7 @@ class _DatePickerState extends State<DatePicker> {
     if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
+        date = "${selectedDate.day}/${selectedDate.month}/${selectedDate.year}";
       });
     }
   }

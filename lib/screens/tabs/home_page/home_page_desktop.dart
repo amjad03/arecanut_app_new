@@ -374,7 +374,7 @@ class _HomePageDesktopState extends State<HomePageDesktop> {
                             final machineData = machineDocs[index].data()
                                 as Map<String, dynamic>;
                             final availability = machineData['status'];
-
+                            final machineId = machineDocs[index].id;
                             return GestureDetector(
                               onTap: () async {
                                 print("clicked");
@@ -405,7 +405,10 @@ class _HomePageDesktopState extends State<HomePageDesktop> {
                                             as Map<String, dynamic>);
 
                                 goToDetailScreen(
-                                    machineService, serviceProviderModel);
+                                    machineService,
+                                    serviceProviderModel,
+                                    machineId,
+                                    serviceProviderId);
                               },
                               child: MachineCardDesktop(
                                 title: machineData['machineName'],
@@ -633,13 +636,15 @@ class _HomePageDesktopState extends State<HomePageDesktop> {
   }
 
   void goToDetailScreen(MachineService machineService,
-      ServiceProviderModel serviceProviderModel) {
+      ServiceProviderModel serviceProviderModel, machineId, serviceProviderId) {
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => DetailScreen(
                 machineService: machineService,
-                serviceProviderModel: serviceProviderModel)));
+                serviceProviderModel: serviceProviderModel,
+                machineId: machineId,
+                serviceProviderId: serviceProviderId)));
   }
 }
 

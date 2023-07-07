@@ -8,12 +8,16 @@ class Footer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = Theme.of(context).brightness == Brightness.dark
+        ? Colors.grey.shade800
+        : Colors.grey[200];
+
+    final dividerColor = Theme.of(context).brightness == Brightness.dark
         ? Colors.black54
         : Colors.grey;
 
     return Container(
       width: double.maxFinite,
-      color: Colors.grey[200],
+      color: color,
       padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -27,7 +31,7 @@ class Footer extends StatelessWidget {
           Divider(
             indent: 15,
             endIndent: 15,
-            color: color,
+            color: dividerColor,
           ),
           const SizedBox(height: 10.0),
           Row(
@@ -129,7 +133,7 @@ class Footer extends StatelessWidget {
           Divider(
             indent: 15,
             endIndent: 15,
-            color: color,
+            color: dividerColor,
           ),
           const SizedBox(height: 16.0),
           Text(

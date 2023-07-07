@@ -7,6 +7,7 @@ import '../../constants/dimensions.dart';
 import '../../repository/auth_repository.dart';
 import '../../services/validation_service.dart';
 import '../../widgets/custom_button.dart';
+import 'otp_screen.dart';
 
 String gender = '';
 
@@ -21,6 +22,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController nameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController emailController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
   bool isLoading = false;
@@ -48,6 +50,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ? Colors.grey
         : Colors.black45;
 
+    var bg = Theme.of(context).brightness == Brightness.dark
+        ? Colors.grey.shade700
+        : Colors.grey.shade200;
+
+    var color = Theme.of(context).brightness == Brightness.dark
+        ? Colors.grey.shade800
+        : Colors.grey.shade300;
+
     return Scaffold(
       backgroundColor: bgColor,
       body: Stack(children: [
@@ -64,7 +74,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 width: 450,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
-                    color: Colors.white,
+                    color: bg,
                     boxShadow: const [
                       BoxShadow(color: Colors.black38, blurRadius: 10)
                     ]),
@@ -113,7 +123,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 keyboardType: TextInputType.text,
                                 decoration: InputDecoration(
                                   filled: true,
-                                  fillColor: const Color(0xFFEBEBEB),
+                                  fillColor: color,
                                   focusColor: Colors.grey,
                                   contentPadding: EdgeInsets.symmetric(
                                       horizontal: Dimensions.fifteen,
@@ -162,7 +172,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 keyboardType: TextInputType.text,
                                 decoration: InputDecoration(
                                   filled: true,
-                                  fillColor: const Color(0xFFEBEBEB),
+                                  fillColor: color,
                                   focusColor: Colors.grey,
                                   contentPadding: EdgeInsets.symmetric(
                                       horizontal: Dimensions.fifteen,
@@ -180,16 +190,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   iconColor: iconColor,
                                   labelStyle: TextStyle(color: iconColor),
                                 ),
-                                validator: (value) {
-                                  if (value == null ||
-                                      value.toString().isEmpty) {
-                                    return "Email is required";
-                                  } else if (!isEmail(value)) {
-                                    return "Please enter a valid email address";
-                                  } else {
-                                    return null;
-                                  }
-                                },
+                                // validator: (value) {
+                                //   // if (value == null ||
+                                //   //     value.toString().isEmpty) {
+                                //   //   return "Email is required";
+                                //   // } else
+                                //   if (!isEmail(value!)) {
+                                //     return "Please enter a valid email address";
+                                //   } else {
+                                //     return null;
+                                //   }
+                                // },
                               ),
                             ],
                           ),
@@ -215,7 +226,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 maxLength: 10,
                                 decoration: InputDecoration(
                                   filled: true,
-                                  fillColor: const Color(0xFFEBEBEB),
+                                  fillColor: color,
                                   focusColor: Colors.grey,
                                   contentPadding: EdgeInsets.symmetric(
                                       horizontal: Dimensions.fifteen,
@@ -270,7 +281,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 keyboardType: TextInputType.text,
                                 decoration: InputDecoration(
                                   filled: true,
-                                  fillColor: const Color(0xFFEBEBEB),
+                                  fillColor: color,
                                   focusColor: Colors.grey,
                                   contentPadding: EdgeInsets.symmetric(
                                       horizontal: Dimensions.fifteen,
@@ -336,20 +347,58 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   setState(() {
                                     isLoading = true;
                                   });
-                                  String? res =
-                                      await signUpWithEmailAndPassword(
-                                          emailController.text.trim(),
-                                          passwordController.text.trim(),
-                                          nameController.text.trim(),
-                                          context);
-                                  if (res == 'true') {
-                                    addUserData(
+
+                                  if (emailController.text == "") {
+                                    verifyPhoneNumber(
+                                        phoneController.text.trim(),
+                                        context,
                                         nameController.text.trim(),
-                                        emailController.text.trim(),
                                         phoneController.text.trim());
-                                    storeUserRole("user");
-                                    moveToHomePage();
+
+                                    // Navigator.push(
+                                    //     context,
+                                    //     MaterialPageRoute(
+                                    //         builder: (context) => OTPScreen()));
+                                    // if (res == 'true') {
+                                    // addUserData(
+                                    //     nameController.text.trim(),
+                                    //     emailController.text.trim() ?? "",
+                                    //     phoneController.text.trim());
+                                    // storeUserRole("user");
+                                    // moveToHomePage();
+                                    // }
+                                  } else {
+                                    String? res =
+                                        await signUpWithEmailAndPassword(
+                                            emailController.text.trim(),
+                                            passwordController.text.trim(),
+                                            nameController.text.trim(),
+                                            context);
+
+                                    if (res == 'true') {
+                                      addUserData(
+                                          nameController.text.trim(),
+                                          emailController.text.trim(),
+                                          phoneController.text.trim());
+                                      storeUserRole("user");
+                                      moveToHomePage();
+                                    }
                                   }
+                                  // String? res =
+                                  //     await signUpWithEmailAndPassword(
+                                  //         emailController.text.trim() ?? "",
+                                  //         passwordController.text.trim(),
+                                  //         nameController.text.trim(),
+                                  //         context);
+
+                                  // if (res == 'true') {
+                                  //   addUserData(
+                                  //       nameController.text.trim(),
+                                  //       emailController.text.trim() ?? "",
+                                  //       phoneController.text.trim());
+                                  //   storeUserRole("user");
+                                  //   moveToHomePage();
+                                  // }
                                   setState(() {
                                     isLoading = false;
                                   });

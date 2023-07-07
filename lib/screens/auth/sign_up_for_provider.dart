@@ -55,6 +55,14 @@ class _SignUpScreenForProviderState extends State<SignUpScreenForProvider> {
         ? Colors.grey
         : Colors.black45;
 
+    var bg = Theme.of(context).brightness == Brightness.dark
+        ? Colors.grey.shade700
+        : Colors.grey.shade200;
+
+    var color = Theme.of(context).brightness == Brightness.dark
+        ? Colors.grey.shade800
+        : Colors.grey.shade300;
+
     return Scaffold(
       backgroundColor: bgColor,
       body: Stack(children: [
@@ -72,7 +80,7 @@ class _SignUpScreenForProviderState extends State<SignUpScreenForProvider> {
                 width: 450,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
-                    color: Colors.white,
+                    color: bg,
                     boxShadow: const [
                       BoxShadow(color: Colors.black38, blurRadius: 10)
                     ]),
@@ -122,7 +130,7 @@ class _SignUpScreenForProviderState extends State<SignUpScreenForProvider> {
                                 keyboardType: TextInputType.text,
                                 decoration: InputDecoration(
                                   filled: true,
-                                  fillColor: const Color(0xFFEBEBEB),
+                                  fillColor: color,
                                   focusColor: Colors.grey,
                                   contentPadding: EdgeInsets.symmetric(
                                       horizontal: Dimensions.fifteen,
@@ -171,7 +179,7 @@ class _SignUpScreenForProviderState extends State<SignUpScreenForProvider> {
                                 keyboardType: TextInputType.text,
                                 decoration: InputDecoration(
                                   filled: true,
-                                  fillColor: const Color(0xFFEBEBEB),
+                                  fillColor: color,
                                   focusColor: Colors.grey,
                                   contentPadding: EdgeInsets.symmetric(
                                       horizontal: Dimensions.fifteen,
@@ -225,7 +233,7 @@ class _SignUpScreenForProviderState extends State<SignUpScreenForProvider> {
                                 maxLength: 10,
                                 decoration: InputDecoration(
                                   filled: true,
-                                  fillColor: const Color(0xFFEBEBEB),
+                                  fillColor: color,
                                   focusColor: Colors.grey,
                                   contentPadding: EdgeInsets.symmetric(
                                       horizontal: Dimensions.fifteen,
@@ -280,7 +288,7 @@ class _SignUpScreenForProviderState extends State<SignUpScreenForProvider> {
                                 keyboardType: TextInputType.text,
                                 decoration: InputDecoration(
                                   filled: true,
-                                  fillColor: const Color(0xFFEBEBEB),
+                                  fillColor: color,
                                   focusColor: Colors.grey,
                                   contentPadding: EdgeInsets.symmetric(
                                       horizontal: Dimensions.fifteen,
@@ -356,7 +364,7 @@ class _SignUpScreenForProviderState extends State<SignUpScreenForProvider> {
                                 maxLines: 4,
                                 decoration: InputDecoration(
                                   filled: true,
-                                  fillColor: const Color(0xFFEBEBEB),
+                                  fillColor: color,
                                   focusColor: Colors.grey,
                                   contentPadding: EdgeInsets.symmetric(
                                       horizontal: Dimensions.fifteen,
@@ -405,7 +413,7 @@ class _SignUpScreenForProviderState extends State<SignUpScreenForProvider> {
                                 keyboardType: TextInputType.number,
                                 decoration: InputDecoration(
                                   filled: true,
-                                  fillColor: const Color(0xFFEBEBEB),
+                                  fillColor: color,
                                   focusColor: Colors.grey,
                                   contentPadding: EdgeInsets.symmetric(
                                       horizontal: Dimensions.fifteen,
@@ -457,7 +465,7 @@ class _SignUpScreenForProviderState extends State<SignUpScreenForProvider> {
                                 keyboardType: TextInputType.number,
                                 decoration: InputDecoration(
                                   filled: true,
-                                  fillColor: const Color(0xFFEBEBEB),
+                                  fillColor: color,
                                   focusColor: Colors.grey,
                                   contentPadding: EdgeInsets.symmetric(
                                       horizontal: Dimensions.fifteen,
@@ -509,7 +517,7 @@ class _SignUpScreenForProviderState extends State<SignUpScreenForProvider> {
                                 keyboardType: TextInputType.number,
                                 decoration: InputDecoration(
                                   filled: true,
-                                  fillColor: const Color(0xFFEBEBEB),
+                                  fillColor: color,
                                   focusColor: Colors.grey,
                                   contentPadding: EdgeInsets.symmetric(
                                       horizontal: Dimensions.fifteen,

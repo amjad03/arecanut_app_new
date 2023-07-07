@@ -45,8 +45,9 @@ class MyApp extends StatelessWidget {
                 // ),
                 theme: AppTheme.lightTheme,
                 darkTheme: AppTheme.darkTheme,
+                // themeMode: themeNotifier.isDark ? ThemeMode.light : ThemeMode.dark,
                 themeMode:
-                    themeNotifier.isDark ? ThemeMode.light : ThemeMode.dark,
+                    !themeNotifier.isDark ? ThemeMode.dark : ThemeMode.light,
                 // home: role == "user" ? const MainPage() : const MainPageForProvider()
                 home: const MainPage());
           });
@@ -75,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(""),
+        title: const Text(""),
       ),
       body: Center(
         child: Column(
@@ -85,20 +86,21 @@ class _MyHomePageState extends State<MyHomePage> {
                 onPressed: () {
                   Navigator.pushAndRemoveUntil(
                     context,
-                    MaterialPageRoute(builder: (context) => SignInScreen()),
+                    MaterialPageRoute(
+                        builder: (context) => const SignInScreen()),
                     (route) => false,
                   );
                 },
-                child: Text("Go to login page")),
+                child: const Text("Go to login page")),
             ElevatedButton(
                 onPressed: () {
                   Navigator.pushAndRemoveUntil(
                     context,
-                    MaterialPageRoute(builder: (context) => MainPage()),
+                    MaterialPageRoute(builder: (context) => const MainPage()),
                     (route) => false,
                   );
                 },
-                child: Text("Go to home page"))
+                child: const Text("Go to home page"))
           ],
         ),
       ), // This trailing comma makes auto-formatting nicer for build methods.

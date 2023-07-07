@@ -1,3 +1,4 @@
+import 'package:arecanut_app/constants/dimensions.dart';
 import 'package:arecanut_app/models/data_models/machine_service_model.dart';
 import 'package:arecanut_app/models/data_models/service_provider_model.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -7,18 +8,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
 
+import '../../../repository/auth_repository.dart';
 import '../../../widgets/custom_button.dart';
+import '../../../widgets/show_message.dart';
 import '../../components/footer/footer_mobile.dart';
+import '../book_machine/book_machine_page_mobile.dart';
 
 class DetailScreenMobile extends StatefulWidget {
   const DetailScreenMobile(
       {Key? key,
       required this.machineService,
-      required this.serviceProviderModel})
+      required this.serviceProviderModel,
+      required this.machineId,
+      required this.serviceProviderId})
       : super(key: key);
 
   final MachineService machineService;
   final ServiceProviderModel serviceProviderModel;
+  final String machineId;
+  final String serviceProviderId;
 
   @override
   State<DetailScreenMobile> createState() => _DetailScreenMobileState();
@@ -100,19 +108,60 @@ class _DetailScreenMobileState extends State<DetailScreenMobile> {
               // ),
               //   ],
               // )
-              Container(
-                width: double.maxFinite,
-                height: 300,
-                decoration: const BoxDecoration(
-                    image: DecorationImage(
-                        image:
-                            AssetImage("assets/images/image_placeholder.png"),
-                        fit: BoxFit.cover)),
-                child: CachedNetworkImage(
-                  imageUrl: selectedImage,
-                  fit: BoxFit.cover,
+              Stack(children: [
+                Container(
+                  width: double.maxFinite,
+                  height: 300,
+                  decoration: const BoxDecoration(
+                      image: DecorationImage(
+                          image:
+                              AssetImage("assets/images/image_placeholder.png"),
+                          fit: BoxFit.cover)),
+                  child: CachedNetworkImage(
+                    imageUrl: selectedImage,
+                    fit: BoxFit.cover,
+                  ),
                 ),
-              ),
+                Positioned(
+                    width: 40,
+                    height: 40,
+                    right: 8,
+                    top: 8,
+                    child: InkWell(
+                      onTap: () async {
+                        if (checkLoggedIn()) {
+                          // if(isExists){
+                          //   final item = _machines[index].toJson();
+                          //   FavoritesManager.removeFromFavorites(item);
+                          //   favoritesNotifier.notifyListeners();
+                          // }
+                          // else {
+                          //   Map<String, dynamic> itemMap = _machines[index].toJson();
+                          //   await FavoritesManager.saveToFavorites(itemMap);
+                          //   favoritesNotifier.notifyListeners();
+                          // }
+                        } else {
+                          showToast("You are not logged in");
+                        }
+                        //   Map<String, dynamic> itemMap = _machines[index].toJson();
+                        //   await FavoritesManager.saveToFavorites(itemMap);
+                      },
+                      child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.circular(Dimensions.fifty),
+                              color: Colors.white,
+                              boxShadow: const [
+                                BoxShadow(color: Colors.grey, blurRadius: 3)
+                              ]),
+                          // child: isExists ? Icon(Icons.favorite,color: Colors.red,size: Dimensions.thirty,) : Icon(Icons.favorite_outline,color: Colors.red,size: Dimensions.thirty,)
+                          child: const Icon(
+                            Icons.favorite,
+                            color: Colors.red,
+                            // size: 30,
+                          )),
+                    )),
+              ]),
               const SizedBox(height: 10),
               SizedBox(
                 height: 100,
@@ -139,10 +188,20 @@ class _DetailScreenMobileState extends State<DetailScreenMobile> {
                             //         Border.all(color: Colors.white, width: 5)),
                             width: 80,
                             height: 100,
-                            child: Image.network(
-                              widget.machineService.galleryImages[index],
+                            decoration: const BoxDecoration(
+                                image: DecorationImage(
+                                    image: AssetImage(
+                                        "assets/images/image_placeholder.png"),
+                                    fit: BoxFit.cover)),
+                            child: CachedNetworkImage(
+                              imageUrl:
+                                  widget.machineService.galleryImages[index],
                               fit: BoxFit.cover,
                             ),
+                            // child: Image.network(
+                            //   widget.machineService.galleryImages[index],
+                            //   fit: BoxFit.cover,
+                            // ),
                           ),
                           if (selectedImage ==
                               widget.machineService.galleryImages[index])
@@ -385,7 +444,33 @@ class _DetailScreenMobileState extends State<DetailScreenMobile> {
                     height: 50,
                     child: CustomButton(
                       title: "Book Now",
-                      onPressed: () {},
+                      onPressed: () {
+                        if (checkLoggedIn()) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => BookMachineMobile(
+                                        title:
+                                            widget.machineService.machineName,
+                                        image: widget
+                                            .machineService.galleryImages[0],
+                                        price: widget.machineService.price
+                                            .toString(),
+                                        rating: '4.3',
+                                        distance: "10",
+                                        totalRatings: widget
+                                            .serviceProviderModel.totalRatings
+                                            .toString(),
+                                        address: widget.serviceProviderModel
+                                            .serviceProviderAddress,
+                                        machineId: widget.machineId,
+                                        serviceProviderId:
+                                            widget.serviceProviderId,
+                                      )));
+                        } else {
+                          showToast("You are not logged in");
+                        }
+                      },
                       fontSize: 20,
                     ),
                   ))

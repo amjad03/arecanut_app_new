@@ -40,45 +40,16 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         ? Colors.grey
         : Colors.black45;
 
+    var bg = Theme.of(context).brightness == Brightness.dark
+        ? Colors.grey.shade700
+        : Colors.grey.shade200;
+
+    var color = Theme.of(context).brightness == Brightness.dark
+        ? Colors.grey.shade800
+        : Colors.grey.shade300;
+
     Future<void> popScreen() async {
       Navigator.of(context).pop();
-    }
-
-    Future<void> showSuccess(
-      BuildContext context,
-    ) async {
-      return showDialog<void>(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Successful!'),
-            content: Text(
-              "We have sent you a password reset link to ${emailController.text},\ncheck your email inbox.(if not found then check your spam folder)",
-              // textAlign: TextAlign.center,
-            ),
-            actions: <Widget>[
-              TextButton(
-                child: const Text(
-                  'OK',
-                  style: TextStyle(color: Colors.grey),
-                ),
-                onPressed: () async {
-                  // await popScreen();
-                  // Navigator.popUntil(context, ModalRoute.withName('/signIn'));
-                  // await Navigator.of(context).pop();
-                  // Navigator.of(context);
-                  Navigator.popUntil(context, ModalRoute.withName('/signIn'));
-                  // Navigator.of(context).pushAndRemoveUntil(
-                  //     MaterialPageRoute(
-                  //         builder: (context) => const SignInScreen()),
-                  //     (Route<dynamic> route) => false);
-                },
-              ),
-            ],
-          );
-        },
-      );
     }
 
     void showSuccessDialog(BuildContext context) {
@@ -93,10 +64,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               TextButton(
                 onPressed: () {
                   Navigator.pop(context); // Close the dialog
-                  Navigator.popUntil(
-                      context,
-                      ModalRoute.withName(
-                          '/signIn')); // Pop until the '/signIn' route
+                  // Navigator.popUntil(
+                  //     context,
+                  //     ModalRoute.withName(
+                  //         '/signIn')
+                  // ); // Pop until the '/signIn' route
                 },
                 child: Text('OK'),
               ),
@@ -126,7 +98,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 width: 450,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
-                    color: Colors.white,
+                    color: bg,
                     boxShadow: const [
                       BoxShadow(color: Colors.black38, blurRadius: 10)
                     ]),
@@ -158,6 +130,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           //     ? AssetImage(Images.forgotPassImageDark)
                           //     : AssetImage(Images.forgotPassImageLight)
                           // ),
+                          // Align(
+                          //     alignment: Alignment.centerRight,
+                          //     child: IconButton(
+                          //       icon: const Icon(Icons.close),
+                          //       onPressed: () {
+                          //         Navigator.pop(context);
+                          //       },
+                          //     )),
                           Text(
                             Strings.forgotPass,
                             style: TextStyle(
@@ -206,7 +186,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                 // maxLines: widget.maxLines,
                                 decoration: InputDecoration(
                                   filled: true,
-                                  fillColor: const Color(0xFFEBEBEB),
+                                  fillColor: color,
                                   focusColor: Colors.grey,
                                   contentPadding: EdgeInsets.symmetric(
                                       horizontal: Dimensions.fifteen,
@@ -285,6 +265,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
                                   if (res == 'true') {
                                     showSuccessDialog(context);
+                                    Future.delayed(Duration(seconds: 1),
+                                        () => Navigator.pop(context));
                                   }
                                   setState(() {
                                     isLoading = false;

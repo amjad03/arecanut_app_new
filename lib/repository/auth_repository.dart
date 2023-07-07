@@ -1,9 +1,11 @@
+import 'package:arecanut_app/screens/tabs/home_page/home_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 
+import '../constants/dimensions.dart';
 import '../widgets/show_message.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -66,6 +68,141 @@ Future<String?> signUpWithEmailAndPassword(
     showToast("An error occurred while signing up.");
   }
   return null;
+}
+
+var smsCode = '';
+
+void code(code) {
+  smsCode = code;
+}
+
+//432094
+void verifyPhoneNumber(
+    String phoneNumber, BuildContext context, name, phone) async {
+  TextEditingController codeController = TextEditingController();
+
+  await _auth.verifyPhoneNumber(
+    phoneNumber: "+91 $phoneNumber",
+    verificationCompleted: (PhoneAuthCredential credential) async {
+      // Auto-verification has occurred (e.g., the device auto-received the SMS code)
+      // You can sign in the user by calling signInWithCredential()
+      await _auth.signInWithCredential(credential);
+    },
+    verificationFailed: (FirebaseAuthException e) {
+      // Handle verification failure
+      showToast("Verification Failed");
+      if (kDebugMode) {
+        print(e.message);
+      }
+    },
+    // codeSent: (String verificationId, int? resendToken) {
+    //   // Save the verification ID and use it to build a credential
+    //   // This is needed to manually enter the verification code
+    //   // String smsCode = ''; // Enter the verification code manually
+    //
+    //   PhoneAuthCredential credential = PhoneAuthProvider.credential(
+    //       verificationId: verificationId, smsCode: smsCode);
+    //   // Use the credential to sign in the user
+    //   _signInWithCredential(credential);
+    // },
+    codeSent: (String verificationId, int? forceResendingToken) {
+      //show dialog to take input from the user
+      showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => AlertDialog(
+                title: const Text("Enter SMS Code"),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    // TextField(
+                    //   controller: codeController,
+                    // ),
+                    TextFormField(
+                      controller: codeController,
+                      textAlign: TextAlign.start,
+                      cursorColor: Colors.grey,
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor:
+                            Theme.of(context).brightness == Brightness.dark
+                                ? Colors.grey.shade800
+                                : Colors.grey.shade300,
+                        focusColor: Colors.grey,
+                        contentPadding: EdgeInsets.symmetric(
+                            horizontal: Dimensions.fifteen,
+                            vertical: Dimensions.ten),
+                        hintText: "Enter OTP",
+                        prefixIcon: const Icon(
+                          Icons.email,
+                          color: Colors.grey,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(Dimensions.ten),
+                          borderSide: BorderSide.none,
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.toString().isEmpty) {
+                          return "OTP is required";
+                        } else {
+                          return null;
+                        }
+                      },
+                    ),
+                  ],
+                ),
+                actions: <Widget>[
+                  TextButton(
+                    child: const Text("Done"),
+                    onPressed: () {
+                      FirebaseAuth auth = FirebaseAuth.instance;
+
+                      smsCode = codeController.text.trim();
+
+                      final credential = PhoneAuthProvider.credential(
+                          verificationId: verificationId, smsCode: smsCode);
+                      auth.signInWithCredential(credential).then((result) {
+                        addUserNameAndPhone(name, phone);
+                        storeUserRole("user");
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const HomePage()));
+                      });
+                    },
+                  )
+                ],
+              ));
+    },
+    codeAutoRetrievalTimeout: (String verificationId) {
+      // Timeout occurred while waiting for the SMS code
+      // Handle the timeout
+    },
+  );
+}
+
+void _signInWithCredential(PhoneAuthCredential credential) async {
+  try {
+    final UserCredential userCredential =
+        await _auth.signInWithCredential(credential);
+    // Handle successful sign-in
+    final User? user = userCredential.user;
+    showToast("Successfully Signed in");
+
+    // Navigator.pushNamedAndRemoveUntil(
+    //     context, "/mainForUser", (route) => false);
+
+    if (kDebugMode) {
+      print('Signed in with phone number: ${user?.phoneNumber}');
+    }
+  } catch (e) {
+    // Handle sign-in errors
+    if (kDebugMode) {
+      print(e.toString());
+    }
+  }
 }
 
 Future<String?> signInWithEmailAndPassword(
@@ -170,6 +307,30 @@ void addUserData(name, email, phone) async {
   await userRef.doc(userId).set(userData);
 }
 
+void addUserNameAndPhone(name, phone) async {
+  // SharedPreferences prefs = await SharedPreferences.getInstance();
+  //
+  // prefs.setString('name', name);
+  // prefs.setString('email', email);
+
+  final user = FirebaseAuth.instance.currentUser;
+  final userId = user?.uid;
+  if (kDebugMode) {
+    print(userId);
+  }
+
+  final userRef = FirebaseFirestore.instance.collection('users');
+
+  final userData = {
+    'name': name,
+    'email': "none",
+    'phone': phone,
+    'role': "user"
+  };
+
+  await userRef.doc(userId).set(userData);
+}
+
 void addServiceProviderData(
   name,
   address,
@@ -244,4 +405,43 @@ Future<String> sendResetPasswordLink(email) async {
 
 void logOut() async {
   await _auth.signOut();
+}
+
+Future<Map<String, String>> getUserData() async {
+  // var name = '';
+  // var email = '';
+
+  final User? currentUser = FirebaseAuth.instance.currentUser;
+  final String uid = currentUser?.uid ?? '';
+
+  final DocumentReference userRef =
+      FirebaseFirestore.instance.collection('users').doc(uid);
+
+  try {
+    final DocumentSnapshot userSnapshot = await userRef.get();
+    if (userSnapshot.exists) {
+      final userData = userSnapshot.data() as Map<String, dynamic>;
+      final String name = userData['name'] ?? '';
+      final String email = userData['email'] ?? '';
+      // Do something with the retrieved user data
+      // name = nameTemp;
+      // email = emailTemp;
+      return {
+        'name': name,
+        'email': email,
+      };
+      if (kDebugMode) {
+        print('Name: $name');
+      }
+      if (kDebugMode) {
+        print('Email: $email');
+      }
+    }
+  } catch (e) {
+    if (kDebugMode) {
+      print('Error retrieving user data: ${e.toString()}');
+    }
+  }
+
+  return {};
 }

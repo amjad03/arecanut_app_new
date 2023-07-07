@@ -10,12 +10,16 @@ import 'detail_screen_tablet.dart';
 class DetailScreen extends StatefulWidget {
   const DetailScreen(
       {Key? key,
-      required this.machineService,
-      required this.serviceProviderModel})
+        required this.machineService,
+        required this.serviceProviderModel,
+        required this.machineId,
+        required this.serviceProviderId})
       : super(key: key);
 
   final MachineService machineService;
   final ServiceProviderModel serviceProviderModel;
+  final String machineId;
+  final String serviceProviderId;
 
   @override
   State<DetailScreen> createState() => _DetailScreenState();
@@ -26,14 +30,19 @@ class _DetailScreenState extends State<DetailScreen> {
   Widget build(BuildContext context) {
     return ScreenTypeLayout.builder(
       mobile: (_) => DetailScreenMobile(
-          machineService: widget.machineService,
-          serviceProviderModel: widget.serviceProviderModel),
+        machineService: widget.machineService,
+        serviceProviderModel: widget.serviceProviderModel,
+        machineId: widget.machineId,
+        serviceProviderId: widget.serviceProviderId,
+      ),
       tablet: (_) => DetailScreenTablet(
           machineService: widget.machineService,
-          serviceProviderModel: widget.serviceProviderModel),
+          serviceProviderModel: widget.serviceProviderModel
+      ),
       desktop: (_) => DetailScreenDesktop(
           machineService: widget.machineService,
-          serviceProviderModel: widget.serviceProviderModel),
+          serviceProviderModel: widget.serviceProviderModel
+      ),
     );
   }
 }

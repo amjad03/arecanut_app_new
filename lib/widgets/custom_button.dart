@@ -60,18 +60,30 @@ class CustomOutlineButton extends StatefulWidget {
 class _CustomOutlineButtonState extends State<CustomOutlineButton> {
   @override
   Widget build(BuildContext context) {
+    final color = Theme.of(context).brightness == Brightness.dark
+        ? Colors.transparent
+        : Colors.white;
+
+    final txtColor = Theme.of(context).brightness == Brightness.dark
+        ? Colors.white
+        : Colors.black;
+
+    final border = Theme.of(context).brightness == Brightness.dark
+        ? Colors.grey
+        : Color(0xFF146EB4);
+
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.white,
+          backgroundColor: color,
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(Dimensions.ten),
-              side: BorderSide(color: Color(0xFF146EB4))),
+              side: BorderSide(color: border)),
           padding: EdgeInsets.symmetric(vertical: Dimensions.fifteen)),
       onPressed: widget.onPressed,
       child: Text(
         widget.title,
         style: TextStyle(
-            color: Colors.black,
+            color: txtColor,
             fontSize: widget.fontSize,
             fontFamily: 'Inter',
             fontWeight: FontWeight.w400),
